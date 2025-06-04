@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Faire un don - WoT Blitz</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Faire un don</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="profile.html">Profil</a></li>
+        <li><a href="share.html">Partager</a></li>
+        <li><a href="donate.html">Faire un don</a></li>
+        <li id="login-logout"><a href="login.html">Se connecter</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <form id="donateForm">
+      <label for="donorUsername">Pseudo :</label>
+      <input type="text" name="username" id="donorUsername" required>
+      <label for="donationAmount">Montant (€) :</label>
+      <input type="number" name="amount" id="donationAmount" required>
+      <button type="submit">Donner</button>
+    </form>
+  </main>
+  <footer>
+    <div id="donors-list"></div>
+  </footer>
+  <script src="js/donate.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>

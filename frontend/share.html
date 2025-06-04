@@ -1,0 +1,48 @@
+<!-- frontend/share.html -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Partager - World of Tanks Blitz</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Partager un contenu</h1>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="profile.html">Profil</a>
+      <a href="donate.html">Faire un don</a>
+      <a id="login-logout" href="login.html">Se connecter</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Uploader un Replay</h2>
+      <form id="uploadReplayForm" enctype="multipart/form-data">
+        <input type="text" name="title" placeholder="Titre" required />
+        <input type="file" name="file" accept=".wotreplay" required />
+        <button type="submit">Partager</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Partager une Astuce</h2>
+      <form id="addTipForm">
+        <input type="text" name="title" placeholder="Titre" required />
+        <textarea name="content" placeholder="Contenu" required></textarea>
+        <button type="submit">Envoyer</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 World of Tanks Blitz</p>
+    <div id="donors-list"></div>
+  </footer>
+
+  <script src="js/share.js"></script>
+  <script src="js/common.js"></script>
+</body>
+</html>
