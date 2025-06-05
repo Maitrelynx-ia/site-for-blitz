@@ -18,19 +18,28 @@
       </ul>
     </nav>
   </header>
-  <main>
-    <form id="donateForm">
-      <label for="donorUsername">Pseudo :</label>
-      <input type="text" name="username" id="donorUsername" required>
-      <label for="donationAmount">Montant (€) :</label>
-      <input type="number" name="amount" id="donationAmount" required>
-      <button type="submit">Donner</button>
+  <main class="login">
+    <h1>Connexion</h1>
+    <p>Connectez-vous pour accéder à vos statistiques, replays et astuces.</p>
+    <form id="login-form">
+      <label for="username">Nom d'utilisateur:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Mot de passe:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Se connecter</button>
     </form>
   </main>
+
   <footer>
-    <div id="donors-list"></div>
+    <p>&copy; 2025 World of Tanks Blitz Community</p>
+    <div id="donateurs">
+      <strong>Merci aux donateurs :</strong>
+      <ul id="liste-donateurs"></ul>
+    </div>
   </footer>
-  <script src="js/donate.js"></script>
-  <script src="js/common.js"></script>
+
+  <script src="js/scripts.js"></script>
 </body>
 </html>
