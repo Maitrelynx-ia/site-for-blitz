@@ -18,13 +18,40 @@
       </ul>
     </nav>
   </header>
-  <main>
-    <h2>Bienvenue sur le site communautaire WoT Blitz</h2>
-    <p>Partagez vos replays, astuces, et suivez vos statistiques !</p>
+  
+    <main class="don">
+    <h1>Soutenir la Communauté</h1>
+    <p>Vos dons permettent de maintenir le site et d'organiser des événements pour la communauté.</p>
+
+    <form id="don-form">
+      <label for="donateur">Pseudo (optionnel) :</label>
+      <input type="text" id="donateur" name="donateur" placeholder="Votre pseudo">
+
+      <label>
+        <input type="checkbox" id="anonyme" name="anonyme">
+        Faire un don anonyme
+      </label>
+
+      <label for="montant">Montant :</label>
+      <input type="number" id="montant" name="montant" min="1" required>
+
+      <button type="submit">Faire un don</button>
+    </form>
+
+    <section>
+      <h2>Merci à nos donateurs :</h2>
+      <ul id="liste-donateurs"></ul>
+    </section>
   </main>
+
   <footer>
-    <div id="donors-list"></div>
+    <p>&copy; 2025 World of Tanks Blitz Community</p>
+    <div id="donateurs">
+      <strong>Merci aux donateurs :</strong>
+      <ul id="footer-donateurs"></ul>
+    </div>
   </footer>
-  <script src="js/common.js"></script>
+
+  <script src="js/scripts.js"></script>
 </body>
 </html>
