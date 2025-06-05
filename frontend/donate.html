@@ -17,26 +17,38 @@
         <li id="login-logout"><a href="login.html">Se connecter</a></li>
       </ul>
     </nav>
-  </header>
-  <main class="login">
-    <h1>Connexion</h1>
-    <p>Connectez-vous pour accéder à vos statistiques, replays et astuces.</p>
-    <form id="login-form">
-      <label for="username">Nom d'utilisateur:</label>
-      <input type="text" id="username" name="username" required>
+   </header>
 
-      <label for="password">Mot de passe:</label>
-      <input type="password" id="password" name="password" required>
+  <main class="don">
+    <h1>Soutenir la Communauté</h1>
+    <p>Vos dons permettent de maintenir le site et d'organiser des événements pour la communauté.</p>
 
-      <button type="submit">Se connecter</button>
+    <form id="don-form">
+      <label for="donateur">Pseudo (optionnel) :</label>
+      <input type="text" id="donateur" name="donateur" placeholder="Votre pseudo">
+
+      <label>
+        <input type="checkbox" id="anonyme" name="anonyme">
+        Faire un don anonyme
+      </label>
+
+      <label for="montant">Montant :</label>
+      <input type="number" id="montant" name="montant" min="1" required>
+
+      <button type="submit">Faire un don</button>
     </form>
+
+    <section>
+      <h2>Merci à nos donateurs :</h2>
+      <ul id="liste-donateurs"></ul>
+    </section>
   </main>
 
   <footer>
     <p>&copy; 2025 World of Tanks Blitz Community</p>
     <div id="donateurs">
       <strong>Merci aux donateurs :</strong>
-      <ul id="liste-donateurs"></ul>
+      <ul id="footer-donateurs"></ul>
     </div>
   </footer>
 
