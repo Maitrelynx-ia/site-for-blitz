@@ -1,30 +1,42 @@
-const express = require("express");
-const path = require("path");
-const fs = require("fs");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const router = express.Router();
-const User = require("../models/user");
 
-router.post("/uploadReplay", async (req, res) => {
-  if (!req.session.userId) return res.status(401).send("Non connecté");
-  if (!req.files || !req.files.file) return res.status(400).send("Fichier manquant");
-  const file = req.files.file;
-  const filePath = `/uploads/replays/${Date.now()}-${file.name}`;
-  file.mv(path.join(__dirname, "../../", filePath), async err => {
-    if (err) return res.status(500).send("Erreur de fichier");
-    await User.findByIdAndUpdate(req.session.userId, {
-      $push: { replays: { title: req.body.title, filePath } }
-    });
-    res.send("Replay partagé !");
-  });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const dir = path.join(__dirname, '..', 'uploads');
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = Date.now() + '-' + file.originalname;
+    cb(null, uniqueName);
+  }
+});
+const upload = multer({ storage: storage });
+
+let sharedContent = []; // Simulé. À remplacer plus tard par une DB
+
+router.post('/', upload.single('file'), (req, res) => {
+  const { type, title, description } = req.body;
+  const filePath = req.file ? `/uploads/${req.file.filename}` : null;
+
+  const content = {
+    type,
+    title,
+    description,
+    file: filePath,
+    date: new Date()
+  };
+
+  sharedContent.unshift(content);
+  res.status(200).json({ message: 'Partage réussi' });
 });
 
-router.post("/addTip", async (req, res) => {
-  if (!req.session.userId) return res.status(401).send("Non connecté");
-  const { title, content } = req.body;
-  await User.findByIdAndUpdate(req.session.userId, {
-    $push: { tips: { title, content } }
-  });
-  res.send("Astuce ajoutée !");
+router.get('/', (req, res) => {
+  res.json(sharedContent);
 });
 
 module.exports = router;

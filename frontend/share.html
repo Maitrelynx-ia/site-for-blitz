@@ -15,34 +15,43 @@
       <a href="donate.html">Faire un don</a>
       <a id="login-logout" href="login.html">Se connecter</a>
     </nav>
-  </header>
+   </header>
 
-  <main>
-    <section>
-      <h2>Uploader un Replay</h2>
-      <form id="uploadReplayForm" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="Titre" required />
-        <input type="file" name="file" accept=".wotbreplay" required />
-        <button type="submit">Partager</button>
-      </form>
-    </section>
+  <main class="share">
+    <h1>Partagez vos Replays et Astuces</h1>
+    <form id="share-form">
+      <label for="type">Type de contenu :</label>
+      <select id="type" name="type" required>
+        <option value="replay">Replay</option>
+        <option value="astuce">Astuce</option>
+      </select>
+
+      <label for="title">Titre :</label>
+      <input type="text" id="title" name="title" placeholder="Titre de votre contenu" required>
+
+      <label for="description">Description :</label>
+      <textarea id="description" name="description" placeholder="Décrivez votre replay ou astuce" required></textarea>
+
+      <label for="file">Fichier (optionnel pour une astuce) :</label>
+      <input type="file" id="file" name="file" accept=".wotbreplay,.txt,.mp4">
+
+      <button type="submit">Partager</button>
+    </form>
 
     <section>
-      <h2>Partager une Astuce</h2>
-      <form id="addTipForm">
-        <input type="text" name="title" placeholder="Titre" required />
-        <textarea name="content" placeholder="Contenu" required></textarea>
-        <button type="submit">Envoyer</button>
-      </form>
+      <h2>Derniers Partages</h2>
+      <ul id="shared-content-list"></ul>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 World of Tanks Blitz</p>
-    <div id="donors-list"></div>
+    <p>&copy; 2025 World of Tanks Blitz Community</p>
+    <div id="donateurs">
+      <strong>Merci aux donateurs :</strong>
+      <ul id="footer-donateurs"></ul>
+    </div>
   </footer>
 
-  <script src="js/share.js"></script>
-  <script src="js/common.js"></script>
+  <script src="js/scripts.js"></script>
 </body>
 </html>
