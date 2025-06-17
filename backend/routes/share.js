@@ -1,41 +1,40 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+// backend/routes/share.js
+const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
 const router = express.Router();
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = path.join(__dirname, '..', 'uploads');
+  destination: (req, file, cb) => {
+    const dir = path.join(__dirname, "..", "uploads");
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
-  filename: function (req, file, cb) {
-    const uniqueName = Date.now() + '-' + file.originalname;
-    cb(null, uniqueName);
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
   }
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-let sharedContent = []; // Simulé. À remplacer plus tard par une DB
+let sharedContent = []; // À remplacer par une base de données plus tard
 
-router.post('/', upload.single('file'), (req, res) => {
+router.post("/", upload.single("file"), (req, res) => {
+  if (!req.session.user)
+    return res.status(401).json({ message: "Non connecté" });
+
   const { type, title, description } = req.body;
-  const filePath = req.file ? `/uploads/${req.file.filename}` : null;
-
+  const file = req.file ? "/uploads/" + req.file.filename : null;
   const content = {
-    type,
-    title,
-    description,
-    file: filePath,
+    type, title, description, file,
+    author: req.session.user.nickname,
     date: new Date()
   };
-
   sharedContent.unshift(content);
-  res.status(200).json({ message: 'Partage réussi' });
+  res.json({ message: "Contenu partagé !" });
 });
 
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
   res.json(sharedContent);
 });
 

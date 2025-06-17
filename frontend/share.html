@@ -18,41 +18,33 @@
     </nav>
   </header>
 
-  <main class="share">
-    <h1>Partagez vos Replays et Astuces</h1>
-    <form id="share-form">
-      <label for="type">Type de contenu :</label>
-      <select id="type" name="type" required>
-        <option value="replay">Replay</option>
-        <option value="astuce">Astuce</option>
-      </select>
-
-      <label for="title">Titre :</label>
-      <input type="text" id="title" name="title" placeholder="Titre de votre contenu" required>
-
-      <label for="description">Description :</label>
-      <textarea id="description" name="description" placeholder="Décrivez votre replay ou astuce" required></textarea>
-
-      <label for="file">Fichier (optionnel pour une astuce) :</label>
-      <input type="file" id="file" name="file" accept=".wotreplay,.txt,.mp4">
-
-      <button type="submit">Partager</button>
-    </form>
-
-    <section>
-      <h2>Derniers Partages</h2>
-      <ul id="shared-content-list"></ul>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 World of Tanks Blitz Community</p>
-    <div id="donateurs">
-      <strong>Merci aux donateurs :</strong>
-      <ul id="footer-donateurs"></ul>
-    </div>
-  </footer>
-
-  <script src="js/scripts.js"></script>
+  <ul id="shared-content-list"></ul>
+  <script>
+    async function loadSharedContent(){
+      const res = await fetch("/api/share");
+      const data = await res.json();
+      const list = document.getElementById("shared-content-list");
+      list.innerHTML = data.length ? "" : "<li>Aucun contenu</li>";
+      data.forEach(item => {
+        const li = document.createElement("li");
+        const date = new Date(item.date).toLocaleString();
+        li.innerHTML = `
+          <strong>${item.type.toUpperCase()}</strong> - <em>${item.title}</em><br>
+          ${item.description}<br>
+          <small>Par ${item.author} le ${date}</small>
+          ${item.file ? `<br><a href="${item.file}" target="_blank">Voir fichier</a>` : ""}
+        `;
+        list.appendChild(li);
+      });
+    }
+    document.querySelector("#share-form").addEventListener("submit", async e => {
+      e.preventDefault();
+      const data = new FormData(e.target);
+      await fetch("/api/share", { method: "POST", body: data });
+      loadSharedContent();
+      e.target.reset();
+    });
+    window.addEventListener("DOMContentLoaded", loadSharedContent);
+  </script>
 </body>
 </html>

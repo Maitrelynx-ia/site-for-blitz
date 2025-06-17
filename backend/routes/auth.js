@@ -1,29 +1,38 @@
 // backend/routes/auth.js
 const express = require("express");
+const { getAccountList, getAccountInfo } = require("../api_wg");
 const router = express.Router();
-const { getAccountsList, getPlayerInfo, getTankStats } = require("../api"); // Import des fonctions API
 
-// Route pour récupérer la liste des comptes
-router.get("/accounts", async (req, res) => {
-  const apiKey = "0cd52ad2ab52ea7511013106881cc3f7";  // Clé API
+router.post("/login-nick", async (req, res) => {
+  const nick = req.body.nickname;
+  if (!nick) return res.status(400).json({ message: "Pseudo requis" });
+
   try {
-    const accounts = await getAccountsList(apiKey);
-    res.json(accounts);  // Envoie la liste des comptes au frontend
-  } catch (error) {
-    res.status(500).send("Erreur lors de la récupération des comptes");
+    const list = await getAccountList(nick);
+    if (!list || list.length === 0)
+      return res.status(404).json({ message: "Aucun joueur trouvé" });
+
+    const account_id = list[0].account_id;
+    const info = await getAccountInfo(account_id);
+
+    req.session.user = {
+      account_id,
+      nickname: info.nickname,
+      stats: info.statistics.all
+    };
+    res.json({ message: "Connecté", user: req.session.user });
+  } catch (err) {
+    res.status(500).json({ message: "Erreur serveur" });
   }
 });
 
-// Route pour récupérer les informations d'un joueur
-router.get("/player/:accountId", async (req, res) => {
-  const { accountId } = req.params;
-  const apiKey = "0cd52ad2ab52ea7511013106881cc3f7";  // Clé API
-  try {
-    const playerInfo = await getPlayerInfo(accountId, apiKey);
-    res.json(playerInfo);  // Envoie les infos du joueur au frontend
-  } catch (error) {
-    res.status(500).send("Erreur lors de la récupération des infos du joueur");
-  }
+router.get("/status", (req, res) => {
+  res.json({ loggedIn: !!req.session.user, user: req.session.user || null });
+});
+
+router.post("/logout", (req, res) => {
+  req.session.destroy();
+  res.sendStatus(200);
 });
 
 module.exports = router;
