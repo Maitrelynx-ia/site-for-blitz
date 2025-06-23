@@ -15,42 +15,81 @@
       <a id="login-logout" href="login.html">Se connecter</a>
     </nav>
   </header>
-<section>
-  <h2>Rechercher un joueur</h2>
-  <form id="search-form">
-    <input type="text" id="search-nick" placeholder="Pseudo du joueur" required>
-    <button type="submit">Rechercher</button>
-  </form>
-  <div id="search-result"></div>
-</section>
+<main>
+    <section>
+      <h2>🔍 Rechercher un joueur</h2>
+      <form id="search-form">
+        <input type="text" id="search-nick" name="nickname" placeholder="Pseudo du joueur" required>
+        <button type="submit">Rechercher</button>
+      </form>
+      <div id="search-result"></div>
+    </section>
 
-<section>
-  <h2>Rechercher un char</h2>
-  <form id="tank-form">
-    <input type="text" id="search-tank" placeholder="Nom du char" required>
-    <button type="submit">Rechercher</button>
-  </form>
-  <div id="tank-result"></div>
-</section>
+    <section>
+      <h2>🚗 Rechercher un char</h2>
+      <form id="tank-form">
+        <input type="text" id="search-tank" name="tankname" placeholder="Nom du char" required>
+        <button type="submit">Rechercher</button>
+      </form>
+      <div id="tank-result"></div>
+    </section>
+  </main>
 
-<ul id="my-shares"></ul>
-<script>
-  window.addEventListener("DOMContentLoaded", async () => {
-    const resShare = await fetch("/api/share");
-    const all = await resShare.json();
-    const userRes = await fetch("/auth/status");
-    const { user } = await userRes.json();
-    document.getElementById("battles").textContent = user.stats.all.battles;
-    // autres stats...
+  <script>
+    document.getElementById("search-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const nickname = document.getElementById("search-nick").value;
+      const resultDiv = document.getElementById("search-result");
 
-    const my = all.filter(i => i.author === user.nickname);
-    const list = document.getElementById("my-shares");
-    list.innerHTML = my.length ? "" : "<li>Aucun partage</li>";
-    my.forEach(item => {
-      const li = document.createElement("li");
-      const date = new Date(item.date).toLocaleString();
-      li.innerHTML = `<strong>${item.title}</strong> – <small>${date}</small>`;
-      list.appendChild(li);
+      try {
+        const response = await fetch("/auth/login-nick", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ nickname })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          const stats = data.user.stats;
+          resultDiv.innerHTML = `
+            <h3>Résultat pour: ${data.user.nickname}</h3>
+            <p><strong>Batailles:</strong> ${stats.battles}</p>
+            <p><strong>Victoires:</strong> ${stats.wins}</p>
+            <p><strong>Dégâts moyen:</strong> ${stats.damage_dealt}</p>
+            <p><strong>XP moyen:</strong> ${stats.xp}</p>
+          `;
+        } else {
+          resultDiv.innerHTML = `<p style="color:red;">${data.message}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p style="color:red;">Erreur lors de la recherche</p>`;
+      }
     });
-  });
-</script>
+
+    document.getElementById("tank-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const tankName = document.getElementById("search-tank").value;
+      const tankResult = document.getElementById("tank-result");
+
+      try {
+        const response = await fetch(`/api/tanks/search?name=${encodeURIComponent(tankName)}`);
+        const data = await response.json();
+        if (response.ok && data.tank) {
+          const tank = data.tank;
+          tankResult.innerHTML = `
+            <h3>${tank.name}</h3>
+            <p><strong>Nation:</strong> ${tank.nation}</p>
+            <p><strong>Niveau:</strong> ${tank.tier}</p>
+            <p><strong>Type:</strong> ${tank.type}</p>
+          `;
+        } else {
+          tankResult.innerHTML = `<p style="color:red;">Aucun char trouvé.</p>`;
+        }
+      } catch (error) {
+        tankResult.innerHTML = `<p style="color:red;">Erreur lors de la recherche</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
