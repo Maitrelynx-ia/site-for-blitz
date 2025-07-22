@@ -1,64 +1,35 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("search-container");
-  if (!container) return;
+document.addEventListener("DOMContentLoaded", function () {
+  const quickSearchForm = document.getElementById("quick-search-form");
+  if (!quickSearchForm) return;
 
-  fetch("search-bar.html")
-    .then(res => res.text())
-    .then(html => {
-      container.innerHTML = html;
+  quickSearchForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const query = document.getElementById("quick-search").value.trim();
 
-      const searchForm = document.getElementById("search-form");
-      const tankForm = document.getElementById("tank-form");
+    if (!query) return;
 
-      searchForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        const nickname = document.getElementById("search-nick").value;
-        const resultDiv = document.getElementById("search-result");
-        try {
-          const res = await fetch("/auth/login-nick", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ nickname })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            const stats = data.user.stats;
-            resultDiv.innerHTML = `
-              <h3>${data.user.nickname}</h3>
-              <p>Batailles : ${stats.battles}</p>
-              <p>Victoires : ${stats.wins}</p>
-              <p>Dégâts moyen : ${stats.damage_dealt}</p>
-              <p>XP moyen : ${stats.xp}</p>
-            `;
-          } else {
-            resultDiv.innerHTML = `<p style="color:red;">${data.message}</p>`;
-          }
-        } catch {
-          resultDiv.innerHTML = `<p style="color:red;">Erreur lors de la recherche</p>`;
-        }
+    try {
+      const playerRes = await fetch("/auth/login-nick", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname: query })
       });
+      if (playerRes.ok) {
+        const data = await playerRes.json();
+        alert(`👤 Joueur trouvé : ${data.user.nickname} (${data.user.stats.battles} batailles)`);
+        return;
+      }
+    } catch {}
 
-      tankForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
-        const tankName = document.getElementById("search-tank").value;
-        const tankResult = document.getElementById("tank-result");
-        try {
-          const res = await fetch(`/api/tanks/search?name=${encodeURIComponent(tankName)}`);
-          const data = await res.json();
-          if (res.ok && data.tank) {
-            const tank = data.tank;
-            tankResult.innerHTML = `
-              <h3>${tank.name}</h3>
-              <p>Nation: ${tank.nation}</p>
-              <p>Niveau: ${tank.tier}</p>
-              <p>Type: ${tank.type}</p>
-            `;
-          } else {
-            tankResult.innerHTML = `<p style="color:red;">Aucun char trouvé.</p>`;
-          }
-        } catch {
-          tankResult.innerHTML = `<p style="color:red;">Erreur lors de la recherche</p>`;
-        }
-      });
-    });
+    try {
+      const tankRes = await fetch(`/api/tanks/search?name=${encodeURIComponent(query)}`);
+      if (tankRes.ok) {
+        const data = await tankRes.json();
+        alert(`🚗 Char trouvé : ${data.tank.name} (Nation : ${data.tank.nation}, Tier : ${data.tank.tier})`);
+        return;
+      }
+    } catch {}
+
+    alert("❌ Aucun joueur ou char trouvé.");
+  });
 });
