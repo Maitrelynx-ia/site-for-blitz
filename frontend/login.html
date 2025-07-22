@@ -12,14 +12,18 @@
     <h1>Connexion à World of Tanks Blitz</h1>
     <h2>Faire un don</h2>
     <nav>
-      <ul>
-        <li><a href="../index.html">Accueil</a></li>
-        <li><a href="profile.html">Profil</a></li>
-        <li><a href="share.html">Partager</a></li>
-        <li><a href="donate.html">Faire un don</a></li>
-        <li id="login-logout"><a href="login.html">Se connecter</a></li>
-      </ul>
-    </nav>
+    <div style="flex-grow: 1;">
+      <a href="../index.html">Accueil</a>
+      <a href="share.html">Partager</a>
+      <a href="donate.html">Faire un don</a>
+      <a id="login-logout" href="login.html">Se connecter</a>
+    </div>
+    <form id="quick-search-form" style="display: flex; gap: 0.5em; align-items: center;">
+      <input type="text" id="quick-search" placeholder="🔍 Pseudo ou char" style="padding: 0.3em; border-radius: 5px; border: 1px solid #30363d; background-color: #0d1117; color: #c9d1d9;">
+      <button type="submit" style="padding: 0.3em 0.6em; background-color: #238636; color: white; border: none; border-radius: 5px;">Go</button>
+    </form>
+    <span id="auth-link" style="margin-left: 1em;"></span>
+  </nav>
   </header>
   
   <main>

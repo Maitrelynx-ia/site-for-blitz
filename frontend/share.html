@@ -10,12 +10,18 @@
   <header>
     <h1>Partager un contenu</h1>
     <nav>
+    <div style="flex-grow: 1;">
       <a href="../index.html">Accueil</a>
-      <a href="profile.html">Profil</a>
+      <a href="share.html">Partager</a>
       <a href="donate.html">Faire un don</a>
       <a id="login-logout" href="login.html">Se connecter</a>
-      <span id="auth-link"></span>
-    </nav>
+    </div>
+    <form id="quick-search-form" style="display: flex; gap: 0.5em; align-items: center;">
+      <input type="text" id="quick-search" placeholder="🔍 Pseudo ou char" style="padding: 0.3em; border-radius: 5px; border: 1px solid #30363d; background-color: #0d1117; color: #c9d1d9;">
+      <button type="submit" style="padding: 0.3em 0.6em; background-color: #238636; color: white; border: none; border-radius: 5px;">Go</button>
+    </form>
+    <span id="auth-link" style="margin-left: 1em;"></span>
+  </nav>
   </header>
 <section>
   <h2>Rechercher un joueur</h2>
