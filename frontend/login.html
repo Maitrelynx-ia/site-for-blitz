@@ -4,7 +4,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Se Connecter - World of Tanks Blitz</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    :root {
+  --charcoal: #1E1E1E;
+  --black: #000000;
+  --white: #FFFFFF;
+  --kaki-dark: #556B2F;
+  --kaki: #6B8E23;
+  --hover-kaki: #7BA331;
+  --border-color: #333;
+  --light-grey: #ccc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--charcoal);
+  color: var(--white);
+  line-height: 1.6;
+}
+
+header {
+  background-color: var(--black);
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: var(--kaki);
+  text-decoration: none;
+  margin: 0 1em;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--hover-kaki);
+  text-decoration: underline;
+}
+
+main {
+  padding: 2em;
+  max-width: 1000px;
+  margin: auto;
+}
+
+section {
+  background-color: var(--black);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1.5em;
+  margin-bottom: 2em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h2, h3 {
+  border-bottom: 2px solid var(--kaki);
+  margin-bottom: 0.5em;
+  padding-bottom: 0.3em;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.8em;
+  margin-top: 0.5em;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  background-color: var(--charcoal);
+  color: var(--white);
+}
+
+button {
+  background-color: var(--kaki);
+  color: var(--white);
+  padding: 0.7em 1.5em;
+  border: none;
+  border-radius: 5px;
+  margin-top: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--hover-kaki);
+}
+
+#search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+#search-bar input {
+  flex: 1;
+  max-width: 250px;
+}
+
+.footer {
+  margin-top: 3em;
+  padding: 1em;
+  text-align: center;
+  background-color: var(--black);
+  border-top: 1px solid var(--border-color);
+  color: var(--light-grey);
+}
+</style> 
 </head>
 <body>
 
