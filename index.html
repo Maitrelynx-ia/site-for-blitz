@@ -167,20 +167,15 @@ button:hover {
     <h1>Soutenir la Communauté</h1>
     <p>Vos dons permettent de maintenir le site et d'organiser des événements pour la communauté.</p>
 
-    <form id="don-form">
-      <label for="donateur">Pseudo (optionnel) :</label>
-      <input type="text" id="donateur" name="donateur" placeholder="Votre pseudo">
+  <form id="don-form" class="form-don">
+    <label for="amount">Montant du don (€) :</label>
+    <input type="number" id="amount" name="amount" placeholder="5" min="1" required />
 
-      <label>
-        <input type="checkbox" id="anonyme" name="anonyme">
-        Faire un don anonyme
-      </label>
+    <label for="nickname">Pseudo (facultatif pour rester anonyme) :</label>
+    <input type="text" id="nickname" name="nickname" placeholder="Anonyme" />
 
-      <label for="montant">Montant :</label>
-      <input type="number" id="montant" name="montant" min="1" required>
-
-      <button type="submit">Faire un don</button>
-    </form>
+    <button type="submit"> Faire un don</button>
+  </form>
 
     <section>
       <h2>Merci à nos donateurs :</h2>
