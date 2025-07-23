@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Se Connecter - World of Tanks Blitz</title>
   <style>
-    :root {
+  :root {
   --charcoal: #1E1E1E;
   --black: #000000;
   --white: #FFFFFF;
   --kaki-dark: #556B2F;
   --kaki: #6B8E23;
   --hover-kaki: #7BA331;
+  --kaki-light: #9ACD32;
   --border-color: #333;
   --light-grey: #ccc;
 }
@@ -38,7 +39,7 @@ header {
 }
 
 nav a {
-  color: var(--kaki);
+  color: var(--kaki-light);
   text-decoration: none;
   margin: 0 1em;
   font-weight: bold;
@@ -58,17 +59,18 @@ main {
 
 section {
   background-color: var(--black);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--kaki-dark);
   border-radius: 10px;
   padding: 1.5em;
   margin-bottom: 2em;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-h2, h3 {
+h1, h2, h3 {
   border-bottom: 2px solid var(--kaki);
   margin-bottom: 0.5em;
   padding-bottom: 0.3em;
+  color: var(--kaki-light);
 }
 
 input, textarea, select {
@@ -100,11 +102,20 @@ button:hover {
   display: flex;
   align-items: center;
   gap: 0.5em;
+  margin-left: auto;
 }
 
 #search-bar input {
   flex: 1;
   max-width: 250px;
+}
+
+.card {
+  background-color: #2a2a2a;
+  padding: 1em;
+  border-radius: 8px;
+  border: 1px solid var(--kaki-dark);
+  margin-bottom: 1em;
 }
 
 .footer {
@@ -114,6 +125,23 @@ button:hover {
   background-color: var(--black);
   border-top: 1px solid var(--border-color);
   color: var(--light-grey);
+}
+
+/* Zones de résultats ou d'erreurs */
+.result, .error {
+  margin-top: 1em;
+  padding: 1em;
+  border-radius: 5px;
+}
+
+.result {
+  background-color: #263a1f;
+  color: var(--white);
+}
+
+.error {
+  background-color: #5a2a2a;
+  color: #ffaaaa;
 }
   </style> 
 </head>
