@@ -211,75 +211,100 @@ button:hover {
     </section>
   </main>
   <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-  // Récupérer le nom du joueur depuis le localStorage
-  const playerName = localStorage.getItem('playerName'); 
+   document.addEventListener('DOMContentLoaded', async function () {
+  const playerName = localStorage.getItem('playerName');
+  const defaultStats = {
+    battles: 0,
+    win_rate: 0,
+    survival_rate: 0,
+    avg_xp: 0,
+    max_xp: 0,
+    avg_wins_per_battle: 0,
+    avg_deaths_per_battle: 0,
+    avg_points_per_battle: 0,
+    avg_damage: 0,
+    dmg_per_shot: 0,
+    dmg_per_hit: 0,
+    base_capture: 0,
+    base_defense: 0,
+    damage_done_received: 0,
+    success_rate: 0,
+    tanks_owned: 0,
+    mastery_badges: 0,
+  };
+
+  const stats = { ...defaultStats };
+  let replays = [];
+  let tips = [];
+  let avatar = "https://via.placeholder.com/100";
+  let name = "Utilisateur invité";
 
   if (playerName) {
-    document.getElementById('player-name').textContent = playerName;
-
-    // Appeler l'API pour récupérer les statistiques du joueur
     try {
       const response = await fetch(`/api/player/${playerName}`);
       const data = await response.json();
 
-      if (response.ok) {
-        // Afficher les statistiques du joueur
-        document.getElementById('battles').textContent = data.stats.battles || 0;
-        document.getElementById('win-rate').textContent = data.stats.win_rate + '%';
-        document.getElementById('survival-rate').textContent = data.stats.survival_rate + '%';
-        document.getElementById('avg-xp').textContent = data.stats.avg_xp || 0;
-        document.getElementById('max-xp').textContent = data.stats.max_xp || 0;
-        document.getElementById('avg-wins-per-battle').textContent = data.stats.avg_wins_per_battle || 0;
-        document.getElementById('avg-deaths-per-battle').textContent = data.stats.avg_deaths_per_battle || 0;
-        document.getElementById('avg-points-per-battle').textContent = data.stats.avg_points_per_battle || 0;
-        document.getElementById('avg-damage').textContent = data.stats.avg_damage || 0;
-        document.getElementById('dmg-per-shot').textContent = data.stats.dmg_per_shot || 0;
-        document.getElementById('dmg-per-hit').textContent = data.stats.dmg_per_hit || 0;
-        document.getElementById('base-capture').textContent = data.stats.base_capture || 0;
-        document.getElementById('base-defense').textContent = data.stats.base_defense || 0;
-        document.getElementById('damage-done-received').textContent = data.stats.damage_done_received || 0;
-        document.getElementById('success-rate').textContent = data.stats.success_rate + '%';
-        document.getElementById('tanks-owned').textContent = data.stats.tanks_owned || 0;
-        document.getElementById('mastery-badges').textContent = data.stats.mastery_badges || 0;
-
-        // Afficher l'avatar
-        document.getElementById('avatar').src = data.avatar_url;
-
-        // Replays de l'utilisateur
-        const replayList = document.getElementById('replay-list');
-        if (data.replays.length > 0) {
-          data.replays.forEach(replay => {
-            const li = document.createElement('li');
-            li.textContent = replay.title;  // Assurez-vous que chaque objet 'replay' possède une propriété 'title'
-            replayList.appendChild(li);
-          });
-        } else {
-          replayList.innerHTML = '<li>Aucun replay disponible.</li>';
-        }
-
-        // Astuces de l'utilisateur
-        const tipList = document.getElementById('tip-list');
-        if (data.tips.length > 0) {
-          data.tips.forEach(tip => {
-            const li = document.createElement('li');
-            li.textContent = tip.title; // Assurez-vous que chaque objet 'tip' possède une propriété 'title'
-            tipList.appendChild(li);
-          });
-        } else {
-          tipList.innerHTML = '<li>Aucune astuce partagée.</li>';
-        }
-      } else {
-        alert('Erreur de récupération des données');
+      if (response.ok && data.stats) {
+        Object.assign(stats, data.stats);
+        replays = data.replays || [];
+        tips = data.tips || [];
+        avatar = data.avatar_url || avatar;
+        name = playerName;
       }
-    } catch (error) {
-      console.error('Erreur:', error);
-      alert('Erreur lors de la récupération des données');
+    } catch (e) {
+      console.warn("Erreur API, affichage des stats par défaut.");
     }
+  }
+
+  // Mise à jour du DOM
+  document.getElementById('player-name').textContent = name;
+  document.getElementById('avatar').src = avatar;
+  document.getElementById('player-tank').textContent = stats.favorite_tank || "Char inconnu";
+  document.getElementById('battles').textContent = stats.battles;
+  document.getElementById('win-rate').textContent = stats.win_rate + '%';
+  document.getElementById('survival-rate').textContent = stats.survival_rate + '%';
+  document.getElementById('avg-xp').textContent = stats.avg_xp;
+  document.getElementById('max-xp').textContent = stats.max_xp;
+  document.getElementById('avg-wins-per-battle').textContent = stats.avg_wins_per_battle;
+  document.getElementById('avg-deaths-per-battle').textContent = stats.avg_deaths_per_battle;
+  document.getElementById('avg-points-per-battle').textContent = stats.avg_points_per_battle;
+  document.getElementById('avg-damage').textContent = stats.avg_damage;
+  document.getElementById('dmg-per-shot').textContent = stats.dmg_per_shot;
+  document.getElementById('dmg-per-hit').textContent = stats.dmg_per_hit;
+  document.getElementById('base-capture').textContent = stats.base_capture + '%';
+  document.getElementById('base-defense').textContent = stats.base_defense + '%';
+  document.getElementById('damage-done-received').textContent = stats.damage_done_received + '%';
+  document.getElementById('success-rate').textContent = stats.success_rate + '%';
+  document.getElementById('tanks-owned').textContent = stats.tanks_owned;
+  document.getElementById('mastery-badges').textContent = stats.mastery_badges;
+
+  // Replays
+  const replayList = document.getElementById('replay-list');
+  replayList.innerHTML = '';
+  if (replays.length > 0) {
+    replays.forEach(r => {
+      const li = document.createElement('li');
+      li.textContent = r.title || "Replay";
+      replayList.appendChild(li);
+    });
   } else {
-    alert('Utilisateur non trouvé');
+    replayList.innerHTML = '<li>Aucun replay disponible.</li>';
+  }
+
+  // Tips
+  const tipList = document.getElementById('tip-list');
+  tipList.innerHTML = '';
+  if (tips.length > 0) {
+    tips.forEach(t => {
+      const li = document.createElement('li');
+      li.textContent = t.title || "Astuce";
+      tipList.appendChild(li);
+    });
+  } else {
+    tipList.innerHTML = '<li>Aucune astuce partagée.</li>';
   }
 });
+
   </script>
 </body>
 </html>
