@@ -158,5 +158,57 @@ button:hover {
     </div>
   </nav>
   </header>
+  <main class="centered">
+    <section class="profile-section">
+      <h1>Mon Profil</h1>
+      
+      <div id="profile-header">
+        <img src="https://via.placeholder.com/100" alt="Avatar" class="avatar" />
+        <div>
+          <h2 id="player-name">Nom du joueur</h2>
+          <p id="player-tank">Le tank préféré : T-34</p>
+        </div>
+      </div>
+
+      <section class="stats">
+        <h2>Statistiques de performance</h2>
+        <ul>
+          <li><strong>Batailles :</strong> <span id="battles">0</span></li>
+          <li><strong>Taux de victoire (30 jours) :</strong> <span id="win-rate">0%</span></li>
+          <li><strong>Taux de survie :</strong> <span id="survival-rate">0%</span></li>
+          <li><strong>XP moyen :</strong> <span id="avg-xp">0</span></li>
+          <li><strong>Max XP :</strong> <span id="max-xp">0</span></li>
+          <li><strong>Victoires moyennes / bataille :</strong> <span id="avg-wins-per-battle">0</span></li>
+          <li><strong>Nombre moyen de morts / morts :</strong> <span id="avg-deaths-per-battle">0</span></li>
+          <li><strong>Points / bataille moyens :</strong> <span id="avg-points-per-battle">0</span></li>
+          <li><strong>Dégâts moyens :</strong> <span id="avg-damage">0</span></li>
+          <li><strong>Dmg / Shot :</strong> <span id="dmg-per-shot">0</span></li>
+          <li><strong>Dmg / Hit :</strong> <span id="dmg-per-hit">0</span></li>
+          <li><strong>Capture de la base moyenne :</strong> <span id="base-capture">0%</span></li>
+          <li><strong>Défense de la base moyenne :</strong> <span id="base-defense">0%</span></li>
+          <li><strong>Dommages accordés / reçus :</strong> <span id="damage-done-received">0%</span></li>
+          <li><strong>Taux de succès :</strong> <span id="success-rate">0%</span></li>
+          <li><strong>Tanks possédés :</strong> <span id="tanks-owned">0</span></li>
+          <li><strong>Insignes de maîtrise (As) :</strong> <span id="mastery-badges">0</span></li>
+        </ul>
+      </section>
+
+      <section class="replays">
+        <h2>Replays récents</h2>
+        <ul id="replay-list">
+          <!-- Les replays s'affichent ici -->
+          <li>Aucun replay disponible.</li>
+        </ul>
+      </section>
+
+      <section class="tips">
+        <h2>Astuces</h2>
+        <ul id="tip-list">
+          <!-- Les astuces s'affichent ici -->
+          <li>Aucune astuce partagée.</li>
+        </ul>
+      </section>
+    </section>
+  </main>
 </body>
 </html>
