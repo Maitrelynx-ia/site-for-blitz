@@ -142,7 +142,7 @@ button:hover {
   background-color: #5a2a2a;
   color: #ffaaaa;
 }
-  </style>
+</style> 
 </head>
 <body>
   <header>
@@ -161,15 +161,14 @@ button:hover {
   <main class="centered">
     <section class="profile-section">
       <h1>Mon Profil</h1>
-
-      <div id="profile-header">
-        <img src="https://via.placeholder.com/100" alt="Avatar" class="avatar" id="avatar" />
-        <div>
-          <h2 id="player-name">Nom du joueur</h2>
-          <p id="player-tank">Le tank préféré : T-34</p>
-        </div>
-      </div>
-
+      
+     <div id="profile-header">
+      <img src="https://via.placeholder.com/100" alt="Avatar" class="avatar" />
+       <div>
+        <h2 id="player-name">Nom du joueur</h2>
+        <p id="player-tank">Le tank préféré : </p>
+       </div>
+     </div>
       <section class="stats">
         <h2>Statistiques de performance</h2>
         <ul>
@@ -182,17 +181,14 @@ button:hover {
           <li><strong>Nombre moyen de morts / morts :</strong> <span id="avg-deaths-per-battle">0</span></li>
           <li><strong>Points / bataille moyens :</strong> <span id="avg-points-per-battle">0</span></li>
           <li><strong>Dégâts moyens :</strong> <span id="avg-damage">0</span></li>
-          <li><strong>Dmg / Shot :</strong> <span id="dmg-per-shot">0</span></li>
-          <li><strong>Dmg / Hit :</strong> <span id="dmg-per-hit">0</span></li>
           <li><strong>Capture de la base moyenne :</strong> <span id="base-capture">0%</span></li>
           <li><strong>Défense de la base moyenne :</strong> <span id="base-defense">0%</span></li>
-          <li><strong>Dommages accordés / reçus :</strong> <span id="damage-done-received">0%</span></li>
-          <li><strong>Taux de succès :</strong> <span id="success-rate">0%</span></li>
+          <li><strong>Dommages fait / reçus :</strong> <span id="damage-done-received">0%</span></li>
+          <li><strong>Taux de victoires :</strong> <span id="success-rate">0%</span></li>
           <li><strong>Tanks possédés :</strong> <span id="tanks-owned">0</span></li>
           <li><strong>Insignes de maîtrise (As) :</strong> <span id="mastery-badges">0</span></li>
         </ul>
       </section>
-
       <section class="replays">
         <h2>Replays récents</h2>
         <ul id="replay-list">
@@ -210,76 +206,5 @@ button:hover {
       </section>
     </section>
   </main>
-  <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-  // Si l'utilisateur est connecté, récupérer ses données et les afficher
-  const playerName = localStorage.getItem('playerName'); // Utilisation du localStorage pour stocker le pseudo
-
-  if (playerName) {
-    document.getElementById('player-name').textContent = playerName;
-    // Appeler l'API pour récupérer les statistiques du joueur
-    try {
-      const response = await fetch(`/api/player/${playerName}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        // Afficher les statistiques du joueur
-        document.getElementById('battles').textContent = data.stats.battles || 0;
-        document.getElementById('win-rate').textContent = data.stats.win_rate + '%';
-        document.getElementById('survival-rate').textContent = data.stats.survival_rate + '%';
-        document.getElementById('avg-xp').textContent = data.stats.avg_xp || 0;
-        document.getElementById('max-xp').textContent = data.stats.max_xp || 0;
-        document.getElementById('avg-wins-per-battle').textContent = data.stats.avg_wins_per_battle || 0;
-        document.getElementById('avg-deaths-per-battle').textContent = data.stats.avg_deaths_per_battle || 0;
-        document.getElementById('avg-points-per-battle').textContent = data.stats.avg_points_per_battle || 0;
-        document.getElementById('avg-damage').textContent = data.stats.avg_damage || 0;
-        document.getElementById('dmg-per-shot').textContent = data.stats.dmg_per_shot || 0;
-        document.getElementById('dmg-per-hit').textContent = data.stats.dmg_per_hit || 0;
-        document.getElementById('base-capture').textContent = data.stats.base_capture || 0;
-        document.getElementById('base-defense').textContent = data.stats.base_defense || 0;
-        document.getElementById('damage-done-received').textContent = data.stats.damage_done_received || 0;
-        document.getElementById('success-rate').textContent = data.stats.success_rate + '%';
-        document.getElementById('tanks-owned').textContent = data.stats.tanks_owned || 0;
-        document.getElementById('mastery-badges').textContent = data.stats.mastery_badges || 0;
-
-        // Afficher l'avatar
-        document.getElementById('avatar').src = data.avatar_url;
-
-        // Replays de l'utilisateur
-        const replayList = document.getElementById('replay-list');
-        if (data.replays.length > 0) {
-          data.replays.forEach(replay => {
-            const li = document.createElement('li');
-            li.textContent = replay.title;  // Assurez-vous que chaque objet 'replay' possède une propriété 'title'
-            replayList.appendChild(li);
-          });
-        } else {
-          replayList.innerHTML = '<li>Aucun replay disponible.</li>';
-        }
-
-        // Astuces de l'utilisateur
-        const tipList = document.getElementById('tip-list');
-        if (data.tips.length > 0) {
-          data.tips.forEach(tip => {
-            const li = document.createElement('li');
-            li.textContent = tip.title; // Assurez-vous que chaque objet 'tip' possède une propriété 'title'
-            tipList.appendChild(li);
-          });
-        } else {
-          tipList.innerHTML = '<li>Aucune astuce partagée.</li>';
-        }
-      } else {
-        alert('Erreur de récupération des données');
-      }
-    } catch (error) {
-      console.error('Erreur:', error);
-      alert('Erreur lors de la récupération des données');
-    }
-  } else {
-    alert('Utilisateur non connecté');
-    window.location.href = 'login.html';  // Rediriger l'utilisateur vers la page de connexion
-  }
-});
-  </script>
 </body>
 </html>
