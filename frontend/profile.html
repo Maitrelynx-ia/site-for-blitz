@@ -4,144 +4,127 @@
   <meta charset="UTF-8" />
   <title>Profil - World of Tanks Blitz</title>
   <style>
-  :root {
-  --charcoal: #1E1E1E;
-  --black: #000000;
-  --white: #FFFFFF;
-  --kaki-dark: #556B2F;
-  --kaki: #6B8E23;
-  --hover-kaki: #7BA331;
-  --kaki-light: #9ACD32;
-  --border-color: #333;
-  --light-grey: #ccc;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+  /* Global Styles */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--charcoal);
-  color: var(--white);
-  line-height: 1.6;
+  margin: 0;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
 }
 
 header {
-  background-color: var(--black);
-  padding: 1em 2em;
+  background-color: #000000;
+  padding: 1em;
+}
+
+nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  gap: 1em;
 }
 
 nav a {
-  color: var(--kaki-light);
+  color: #58a6ff;
   text-decoration: none;
-  margin: 0 1em;
   font-weight: bold;
-  transition: color 0.3s;
 }
 
 nav a:hover {
-  color: var(--hover-kaki);
   text-decoration: underline;
 }
 
-main {
-  padding: 2em;
-  max-width: 1000px;
+footer {
+  background-color: #1e1e1e;
+  color: #b0b0b0;
+  padding: 1em;
+  text-align: center;
+}
+
+h1, h2 {
+  color: #e0e0e0;
+}
+
+h2 {
+  border-bottom: 2px solid #30363d;
+  padding-bottom: 0.5em;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 0.5em 0;
+}
+
+.profile-section {
+  max-width: 800px;
   margin: auto;
-}
-
-section {
-  background-color: var(--black);
-  border: 1px solid var(--kaki-dark);
+  padding: 2em;
+  background-color: #2b2b2b;
   border-radius: 10px;
-  padding: 1.5em;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1em;
   margin-bottom: 2em;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-h1, h2, h3 {
-  border-bottom: 2px solid var(--kaki);
-  margin-bottom: 0.5em;
-  padding-bottom: 0.3em;
-  color: var(--kaki-light);
+.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }
 
-input, textarea, select {
-  width: 100%;
-  padding: 0.8em;
-  margin-top: 0.5em;
-  border-radius: 5px;
-  border: 1px solid var(--border-color);
-  background-color: var(--charcoal);
-  color: var(--white);
+#player-name {
+  font-size: 1.5em;
+  margin: 0;
+  color: #58a6ff;
+}
+
+#player-tank {
+  color: #a0a0a0;
+}
+
+.stats ul {
+  padding: 0;
+}
+
+.stats li {
+  font-size: 1.1em;
+  color: #dcdcdc;
 }
 
 button {
-  background-color: var(--kaki);
-  color: var(--white);
-  padding: 0.7em 1.5em;
+  background-color: #238636;
+  color: white;
+  padding: 0.7em;
   border: none;
   border-radius: 5px;
-  margin-top: 1em;
   cursor: pointer;
-  transition: background-color 0.3s;
+  font-size: 1em;
 }
 
 button:hover {
-  background-color: var(--hover-kaki);
+  background-color: #2ea043;
 }
 
-#search-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin-left: auto;
+.replays, .tips {
+  background-color: #2b2b2b;
+  padding: 1.5em;
+  border-radius: 10px;
+  margin-top: 2em;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-#search-bar input {
-  flex: 1;
-  max-width: 250px;
+footer p {
+  margin: 0;
 }
 
-.card {
-  background-color: #2a2a2a;
-  padding: 1em;
-  border-radius: 8px;
-  border: 1px solid var(--kaki-dark);
-  margin-bottom: 1em;
-}
-
-.footer {
-  margin-top: 3em;
-  padding: 1em;
-  text-align: center;
-  background-color: var(--black);
-  border-top: 1px solid var(--border-color);
-  color: var(--light-grey);
-}
-
-/* Zones de résultats ou d'erreurs */
-.result, .error {
-  margin-top: 1em;
-  padding: 1em;
-  border-radius: 5px;
-}
-
-.result {
-  background-color: #263a1f;
-  color: var(--white);
-}
-
-.error {
-  background-color: #5a2a2a;
-  color: #ffaaaa;
-}
   </style> 
 </head>
 <body>
