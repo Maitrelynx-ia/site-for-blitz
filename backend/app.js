@@ -2,6 +2,7 @@
 const express = require("express");
 const session = require("express-session");
 const path = require("path");
+const shareRoutes = require('./routes/share');
 require("dotenv").config();
 
 const authRoutes = require("./routes/auth");

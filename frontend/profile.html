@@ -192,20 +192,9 @@ button:hover {
         </ul>
       </section>
 
-      <section class="replays">
-        <h2>Replays récents</h2>
-        <ul id="replay-list">
-          <!-- Les replays s'affichent ici -->
-          <li>Aucun replay disponible.</li>
-        </ul>
-      </section>
-
-      <section class="tips">
-        <h2>Astuces</h2>
-        <ul id="tip-list">
-          <!-- Les astuces s'affichent ici -->
-          <li>Aucune astuce partagée.</li>
-        </ul>
+      <section>
+         <h2>📂 Vos publications</h2>
+         <div id="user-shares"></div>
       </section>
     </section>
   </main>
@@ -277,31 +266,22 @@ button:hover {
   document.getElementById('tanks-owned').textContent = stats.tanks_owned;
   document.getElementById('mastery-badges').textContent = stats.mastery_badges;
 
-  // Replays
-  const replayList = document.getElementById('replay-list');
-  replayList.innerHTML = '';
-  if (replays.length > 0) {
-    replays.forEach(r => {
-      const li = document.createElement('li');
-      li.textContent = r.title || "Replay";
-      replayList.appendChild(li);
-    });
-  } else {
-    replayList.innerHTML = '<li>Aucun replay disponible.</li>';
-  }
-
-  // Tips
-  const tipList = document.getElementById('tip-list');
-  tipList.innerHTML = '';
-  if (tips.length > 0) {
-    tips.forEach(t => {
-      const li = document.createElement('li');
-      li.textContent = t.title || "Astuce";
-      tipList.appendChild(li);
-    });
-  } else {
-    tipList.innerHTML = '<li>Aucune astuce partagée.</li>';
-  }
+fetch('/api/share/user')
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("user-shares");
+    if (Array.isArray(data) && data.length > 0) {
+      container.innerHTML = data.map(share => `
+        <div class="share-item">
+          <h3>${share.title} (${share.type})</h3>
+          <p>${share.content}</p>
+          <small>Publié le ${new Date(share.createdAt).toLocaleDateString()}</small>
+        </div>
+      `).join("");
+    } else {
+      container.innerHTML = "<p>Aucun contenu publié.</p>";
+    }
+  });
 });
 
   </script>

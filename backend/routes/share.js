@@ -4,6 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const router = express.Router();
+const Share = require('../models/share');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,6 +37,37 @@ router.post("/", upload.single("file"), (req, res) => {
 
 router.get("/", (req, res) => {
   res.json(sharedContent);
+});
+
+// Soumission d’un replay ou d’une astuce
+router.post('/submit', async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ message: "Non connecté" });
+
+  const { type, title, content } = req.body;
+  const newShare = new Share({
+    account_id: req.session.user.account_id,
+    nickname: req.session.user.nickname,
+    type,
+    title,
+    content
+  });
+
+  await newShare.save();
+  res.json({ message: "Publié avec succès" });
+});
+
+// Récupérer les contenus d’un utilisateur
+router.get('/user', async (req, res) => {
+  if (!req.session.user) return res.status(401).json({ message: "Non connecté" });
+
+  const shares = await Share.find({ account_id: req.session.user.account_id }).sort({ createdAt: -1 });
+  res.json(shares);
+});
+
+// Récupérer tout (partage.html)
+router.get('/all', async (req, res) => {
+  const all = await Share.find().sort({ createdAt: -1 });
+  res.json(all);
 });
 
 module.exports = router;
