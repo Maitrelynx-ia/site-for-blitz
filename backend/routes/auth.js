@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const User = require('../models/user');
 
 const APPLICATION_ID = 'TON_APP_ID';
-const REDIRECT_URI = 'http://localhost:3000/auth/wargaming/callback';
+const REDIRECT_URI = 'http://https://maitrelynx-ia.github.io/site-for-blitz/frontend/login.html/auth/wargaming/callback';
 
 // Redirige vers Wargaming pour l'authentification
 router.get('/wargaming', (req, res) => {
@@ -11,7 +12,8 @@ router.get('/wargaming', (req, res) => {
   res.redirect(authUrl);
 });
 
-// Callback après l'authentification
+
+
 router.get('/wargaming/callback', async (req, res) => {
   const { access_token, account_id, nickname } = req.query;
 
@@ -19,7 +21,17 @@ router.get('/wargaming/callback', async (req, res) => {
     return res.redirect('/login.html');
   }
 
-  // Stocker l’utilisateur dans la session
+  // Stockage dans MongoDB
+  let user = await User.findOne({ account_id });
+  if (!user) {
+    user = new User({ account_id, nickname, access_token });
+  } else {
+    user.access_token = access_token;
+    user.nickname = nickname;
+  }
+  await user.save();
+
+  // Stockage en session
   req.session.user = {
     access_token,
     account_id,
@@ -28,12 +40,3 @@ router.get('/wargaming/callback', async (req, res) => {
 
   res.redirect('/profile.html');
 });
-
-// Déconnexion
-router.get('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/index.html');
-  });
-});
-
-module.exports = router;
