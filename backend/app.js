@@ -25,3 +25,12 @@ app.get("*", (req, res) =>
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur lancé sur le port ${PORT}`));
+
+app.use(session({
+  secret: 'votre_secret_super_secure',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // mettre à true en HTTPS
+}));
+
+app.use('/auth', authRoutes);

@@ -1,38 +1,39 @@
-// backend/routes/auth.js
-const express = require("express");
-const { getAccountList, getAccountInfo } = require("../api_wg");
+const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 
-router.post("/login-nick", async (req, res) => {
-  const nick = req.body.nickname;
-  if (!nick) return res.status(400).json({ message: "Pseudo requis" });
+const APPLICATION_ID = 'TON_APP_ID';
+const REDIRECT_URI = 'http://localhost:3000/auth/wargaming/callback';
 
-  try {
-    const list = await getAccountList(nick);
-    if (!list || list.length === 0)
-      return res.status(404).json({ message: "Aucun joueur trouvé" });
+// Redirige vers Wargaming pour l'authentification
+router.get('/wargaming', (req, res) => {
+  const authUrl = `https://api.wotblitz.eu/wotb/auth/login/?application_id=${APPLICATION_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  res.redirect(authUrl);
+});
 
-    const account_id = list[0].account_id;
-    const info = await getAccountInfo(account_id);
+// Callback après l'authentification
+router.get('/wargaming/callback', async (req, res) => {
+  const { access_token, account_id, nickname } = req.query;
 
-    req.session.user = {
-      account_id,
-      nickname: info.nickname,
-      stats: info.statistics.all
-    };
-    res.json({ message: "Connecté", user: req.session.user });
-  } catch (err) {
-    res.status(500).json({ message: "Erreur serveur" });
+  if (!access_token || !account_id) {
+    return res.redirect('/login.html');
   }
+
+  // Stocker l’utilisateur dans la session
+  req.session.user = {
+    access_token,
+    account_id,
+    nickname
+  };
+
+  res.redirect('/profile.html');
 });
 
-router.get("/status", (req, res) => {
-  res.json({ loggedIn: !!req.session.user, user: req.session.user || null });
-});
-
-router.post("/logout", (req, res) => {
-  req.session.destroy();
-  res.sendStatus(200);
+// Déconnexion
+router.get('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/index.html');
+  });
 });
 
 module.exports = router;
