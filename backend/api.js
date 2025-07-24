@@ -113,3 +113,11 @@ router.get('/tanks/search', async (req, res) => {
 });
 
 module.exports = router;
+
+app.get('/api/user', (req, res) => {
+  if (req.session.user) {
+    res.json({ loggedIn: true, nickname: req.session.user.nickname });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
