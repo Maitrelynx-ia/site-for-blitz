@@ -58,31 +58,48 @@ async function searchTankByName(tankName) {
 // === ROUTES ===
 
 // 🔍 Recherche joueur par pseudo
-router.post('/players/search', async (req, res) => {
-  const { nickname } = req.body;
+// 🔍 Statistiques avancées d'un joueur
+router.get('/players/stats/:account_id', async (req, res) => {
+  const accountId = req.params.account_id;
+
   try {
-    const player = await searchPlayer(nickname);
-    const info = await getPlayerInfo(player.account_id);
+    const info = await getPlayerInfo(accountId);
     const stats = info?.statistics?.all || {};
 
-    const avg_damage = stats.battles ? Math.round(stats.damage_dealt / stats.battles) : 0;
-    const avg_xp = stats.battles ? Math.round(stats.xp / stats.battles) : 0;
+    const battles = stats.battles || 0;
+    const damageDealt = stats.damage_dealt || 0;
+    const hits = stats.hits || 0;
+    const shots = stats.shots || 1;
+    const frags = stats.frags || 0;
+    const survived = stats.survived_battles || 0;
+    const wins = stats.wins || 0;
+    const xp = stats.xp || 0;
+    const losses = stats.losses || 1;
+    const capture = stats.capture_points || 0;
+    const dropped = stats.dropped_capture_points || 0;
+    const damageReceived = stats.damage_received || 1;
 
     res.json({
-      user: {
-        nickname: player.nickname,
-        stats: {
-          battles: stats.battles || 0,
-          wins: stats.wins || 0,
-          avg_damage,
-          avg_xp
-        }
-      }
+      battles,
+      winRate: ((wins / battles) * 100).toFixed(2),
+      survivalRate: ((survived / battles) * 100).toFixed(2),
+      avgXp: Math.round(xp / battles),
+      maxXp: stats.max_xp || 0,
+      avgWinsPerBattle: (wins / battles).toFixed(2),
+      avgFrags: (frags / battles).toFixed(2),
+      avgDamage: Math.round(damageDealt / battles),
+      dmgPerShot: (damageDealt / shots).toFixed(2),
+      dmgPerHit: (damageDealt / hits).toFixed(2),
+      avgCapture: (capture / battles).toFixed(2),
+      avgDefense: (dropped / battles).toFixed(2),
+      dmgRatio: (damageDealt / damageReceived).toFixed(2),
+      hitRatio: ((hits / shots) * 100).toFixed(2)
     });
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
+
 
 // 🔍 Recherche char par nom
 router.get('/tanks/search', async (req, res) => {
