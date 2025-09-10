@@ -146,144 +146,92 @@ button:hover {
 </head>
 <body>
   <header>
-    <h1>Mon Profil</h1>
     <nav>
-    <div style="flex-grow: 1;">
-      <a href="../index.html">Accueil</a>
+      <a href="index.html">Accueil</a>
       <a href="profile.html">Profil</a>
-      <a href="share.html">Partager</a>
-      <a href="search.html"> Recherche</a>
-      <a href="donate.html">Faire un don</a>
-      <a id="login-logout" href="login.html">Se connecter</a>
-    </div>
-  </nav>
+      <a href="share.html">Partage</a>
+      <a href="don.html">Dons</a>
+      <span id="auth-link"></span>
+      <form id="global-search-form" style="margin-left:auto; display:flex; gap:0.5em;">
+        <input type="text" id="global-search-input" placeholder="Rechercher joueur ou char" style="padding:0.3em;">
+        <button type="submit">🔍</button>
+      </form>
+    </nav>
   </header>
-   <main class="centered">
-    <section class="profile-section">
-      <h1>Mon Profil</h1>
 
-      <div id="profile-header">
-        <div>
-          <h2 id="player-name"></h2>
-          <p id="player-tank">Le tank préféré : T-34</p>
-        </div>
-      </div>
-
-      <section class="stats">
-        <h2>Statistiques de performance</h2>
-        <ul>
-          <li><strong>Batailles :</strong> <span id="battles"></span></li>
-          <li><strong>Taux de victoire (30 jours) :</strong> <span id="win-rate">%</span></li>
-          <li><strong>Taux de survie :</strong> <span id="survival-rate">%</span></li>
-          <li><strong>XP moyen :</strong> <span id="avg-xp">0</span></li>
-          <li><strong>Max XP :</strong> <span id="max-xp">0</span></li>
-          <li><strong>Victoires moyennes / bataille :</strong> <span id="avg-wins-per-battle"></span></li>
-          <li><strong>Nombre moyen de morts / morts :</strong> <span id="avg-deaths-per-battle"></span></li>
-          <li><strong>Points / bataille moyens :</strong> <span id="avg-points-per-battle">0</span></li>
-          <li><strong>Dégâts moyens :</strong> <span id="avg-damage">0</span></li>
-          <li><strong>Dmg / Shot :</strong> <span id="dmg-per-shot">0</span></li>
-          <li><strong>Dmg / Hit :</strong> <span id="dmg-per-hit">0</span></li>
-          <li><strong>Capture de la base moyenne :</strong> <span id="base-capture">0%</span></li>
-          <li><strong>Défense de la base moyenne :</strong> <span id="base-defense">0%</span></li>
-          <li><strong>Dommages accordés / reçus :</strong> <span id="damage-done-received">0%</span></li>
-          <li><strong>Taux de succès :</strong> <span id="success-rate">0%</span></li>
-          <li><strong>Tanks possédés :</strong> <span id="tanks-owned">0</span></li>
-          <li><strong>Insignes de maîtrise (As) :</strong> <span id="mastery-badges">0</span></li>
-        </ul>
-      </section>
-
-      <section>
-         <h2>📂 Vos publications</h2>
-         <div id="user-shares"></div>
-      </section>
-    </section>
+  <main>
+    <h2>Résultats de recherche</h2>
+    <div id="search-results">Chargement...</div>
   </main>
+
   <script>
-   document.addEventListener('DOMContentLoaded', async function () {
-  const playerName = localStorage.getItem('playerName');
-  const defaultStats = {
-    battles: 0,
-    win_rate: 0,
-    survival_rate: 0,
-    avg_xp: 0,
-    max_xp: 0,
-    avg_wins_per_battle: 0,
-    avg_deaths_per_battle: 0,
-    avg_points_per_battle: 0,
-    avg_damage: 0,
-    dmg_per_shot: 0,
-    dmg_per_hit: 0,
-    base_capture: 0,
-    base_defense: 0,
-    damage_done_received: 0,
-    success_rate: 0,
-    tanks_owned: 0,
-    mastery_badges: 0,
-  };
+    // Récupérer la valeur recherchée dans l'URL
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
 
-  const stats = { ...defaultStats };
-  let replays = [];
-  let tips = [];
-  let avatar = "https://via.placeholder.com/100";
-  let name = "Utilisateur invité";
+    const resultsDiv = document.getElementById("search-results");
 
-  if (playerName) {
-    try {
-      const response = await fetch(`/api/player/${playerName}`);
-      const data = await response.json();
-
-      if (response.ok && data.stats) {
-        Object.assign(stats, data.stats);
-        replays = data.replays || [];
-        tips = data.tips || [];
-        avatar = data.avatar_url || avatar;
-        name = playerName;
+    async function search(query) {
+      if (!query) {
+        resultsDiv.innerHTML = "<p>Aucune recherche effectuée.</p>";
+        return;
       }
-    } catch (e) {
-      console.warn("Erreur API, affichage des stats par défaut.");
+
+      // Tenter d'abord en tant que joueur
+      try {
+        const res = await fetch("/api/players/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nickname: query })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          resultsDiv.innerHTML = `
+            <h3>👤 Joueur trouvé : ${data.user.nickname}</h3>
+            <p><strong>Batailles :</strong> ${data.user.stats.battles}</p>
+            <p><strong>Victoires :</strong> ${data.user.stats.wins}</p>
+            <p><strong>XP moyen :</strong> ${data.user.stats.avg_xp}</p>
+            <p><strong>Dégâts moyens :</strong> ${data.user.stats.avg_damage}</p>
+          `;
+          return;
+        }
+      } catch (err) {
+        console.error("Erreur recherche joueur:", err);
+      }
+
+      // Sinon essayer en tant que char
+      try {
+        const res = await fetch(`/api/tanks/search?name=${encodeURIComponent(query)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.tank) {
+            resultsDiv.innerHTML = `
+              <h3>🚗 Char trouvé : ${data.tank.name}</h3>
+              <p><strong>Nation :</strong> ${data.tank.nation}</p>
+              <p><strong>Niveau :</strong> ${data.tank.tier}</p>
+              <p><strong>Type :</strong> ${data.tank.type}</p>
+            `;
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Erreur recherche char:", err);
+      }
+
+      // Si rien trouvé
+      resultsDiv.innerHTML = "<p style='color:red;'>Aucun résultat trouvé.</p>";
     }
-  }
 
-  // Mise à jour du DOM
-  document.getElementById('player-name').textContent = name;
-  document.getElementById('avatar').src = avatar;
-  document.getElementById('player-tank').textContent = stats.favorite_tank || "Char inconnu";
-  document.getElementById('battles').textContent = stats.battles;
-  document.getElementById('win-rate').textContent = stats.win_rate + '%';
-  document.getElementById('survival-rate').textContent = stats.survival_rate + '%';
-  document.getElementById('avg-xp').textContent = stats.avg_xp;
-  document.getElementById('max-xp').textContent = stats.max_xp;
-  document.getElementById('avg-wins-per-battle').textContent = stats.avg_wins_per_battle;
-  document.getElementById('avg-deaths-per-battle').textContent = stats.avg_deaths_per_battle;
-  document.getElementById('avg-points-per-battle').textContent = stats.avg_points_per_battle;
-  document.getElementById('avg-damage').textContent = stats.avg_damage;
-  document.getElementById('dmg-per-shot').textContent = stats.dmg_per_shot;
-  document.getElementById('dmg-per-hit').textContent = stats.dmg_per_hit;
-  document.getElementById('base-capture').textContent = stats.base_capture + '%';
-  document.getElementById('base-defense').textContent = stats.base_defense + '%';
-  document.getElementById('damage-done-received').textContent = stats.damage_done_received + '%';
-  document.getElementById('success-rate').textContent = stats.success_rate + '%';
-  document.getElementById('tanks-owned').textContent = stats.tanks_owned;
-  document.getElementById('mastery-badges').textContent = stats.mastery_badges;
+    // Lancer la recherche
+    search(query);
 
-fetch('/api/share/user')
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("user-shares");
-    if (Array.isArray(data) && data.length > 0) {
-      container.innerHTML = data.map(share => `
-        <div class="share-item">
-          <h3>${share.title} (${share.type})</h3>
-          <p>${share.content}</p>
-          <small>Publié le ${new Date(share.createdAt).toLocaleDateString()}</small>
-        </div>
-      `).join("");
-    } else {
-      container.innerHTML = "<p>Aucun contenu publié.</p>";
-    }
-  });
-});
-
+    // Gestion de la recherche globale
+    document.getElementById("global-search-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const value = document.getElementById("global-search-input").value.trim();
+      if (value) window.location.href = `/search.html?q=${encodeURIComponent(value)}`;
+    });
   </script>
 </body>
 </html>
