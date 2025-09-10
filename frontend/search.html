@@ -164,11 +164,46 @@ button:hover {
   </nav>
   </header>
 
-  <main>
-    <h2>🔍 Résultats de recherche</h2>
-    <div id="results"></div>
+ <main>
+    <h2>Résultat de recherche</h2>
+    <div id="search-result">Chargement...</div>
   </main>
 
-  <script src="js/search.js"></script>
+  <script>
+    async function loadSearch() {
+      const params = new URLSearchParams(window.location.search);
+      const nickname = params.get("q");
+      if (!nickname) {
+        document.getElementById("search-result").innerHTML = "<p>Aucun pseudo saisi.</p>";
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/players/search?nickname=${encodeURIComponent(nickname)}`);
+        const data = await res.json();
+
+        if (res.ok) {
+          document.getElementById("search-result").innerHTML = `
+            <h3>${data.nickname}</h3>
+            <p><strong>Batailles:</strong> ${data.stats.battles}</p>
+            <p><strong>Victoires:</strong> ${data.stats.wins}</p>
+            <p><strong>Taux de survie:</strong> ${data.stats.survival_rate}</p>
+            <p><strong>XP moyen:</strong> ${data.stats.avg_xp}</p>
+            <p><strong>Max XP:</strong> ${data.stats.max_xp}</p>
+            <p><strong>Dégâts moyens:</strong> ${data.stats.avg_damage}</p>
+            <p><strong>Ratio dégâts infligés/reçus:</strong> ${data.stats.damage_ratio}</p>
+          `;
+        } else {
+          document.getElementById("search-result").innerHTML =
+            `<p style="color:red;">${data.message}</p>`;
+        }
+      } catch (err) {
+        document.getElementById("search-result").innerHTML =
+          "<p style='color:red;'>Erreur lors de la recherche</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadSearch);
+  </script>
 </body>
 </html>
