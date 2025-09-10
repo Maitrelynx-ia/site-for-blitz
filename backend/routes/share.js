@@ -70,4 +70,34 @@ router.get('/all', async (req, res) => {
   res.json(all);
 });
 
+// Like une publication
+router.post('/like/:id', async (req, res) => {
+  try {
+    const share = await Share.findById(req.params.id);
+    if (!share) return res.status(404).json({ message: "Publication non trouvée" });
+
+    share.likes++;
+    await share.save();
+    res.json({ message: "Like ajouté", likes: share.likes });
+  } catch (err) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+// Ajouter un commentaire
+router.post('/comment/:id', async (req, res) => {
+  const { text } = req.body;
+  const author = req.session.user?.nickname || "Anonyme";
+
+  try {
+    const share = await Share.findById(req.params.id);
+    if (!share) return res.status(404).json({ message: "Publication non trouvée" });
+
+    share.comments.push({ author, text });
+    await share.save();
+    res.json({ message: "Commentaire ajouté", comments: share.comments });
+  } catch (err) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
+
 module.exports = router;

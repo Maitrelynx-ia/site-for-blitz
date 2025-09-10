@@ -192,6 +192,39 @@ button:hover {
       e.target.reset();
     });
     window.addEventListener("DOMContentLoaded", loadSharedContent);
+    document.addEventListener("click", async (e) => {
+  const shareDiv = e.target.closest(".share-item");
+  if (!shareDiv) return;
+  const shareId = shareDiv.getAttribute("data-id");
+
+  // Like
+  if (e.target.classList.contains("like-btn")) {
+    const res = await fetch(`/api/share/like/${shareId}`, { method: "POST" });
+    const data = await res.json();
+    if (res.ok) {
+      shareDiv.querySelector(".like-count").textContent = data.likes;
+    }
+  }
+
+  // Commentaire
+  if (e.target.classList.contains("comment-btn")) {
+    const input = shareDiv.querySelector(".comment-input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    const res = await fetch(`/api/share/comment/${shareId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text })
+    });
+
+    if (res.ok) {
+      // Rafraîchir la page ou commenter dynamiquement
+      location.reload();
+    }
+  }
+});
+
   </script>
 </body>
 </html>
