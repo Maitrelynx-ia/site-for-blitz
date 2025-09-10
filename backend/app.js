@@ -7,6 +7,11 @@ require("dotenv").config();
 
 const authRoutes = require("./routes/auth");
 const shareRoutes = require("./routes/share");
+const apiRoutes = require('./routes/api'); // chemin selon ton projet
+
+//API
+app.use('/api', apiRoutes);
+
 
 // Init
 const app = express();

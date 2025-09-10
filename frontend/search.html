@@ -179,7 +179,7 @@ button:hover {
       }
 
       try {
-        const res = await fetch(`/api/players/search?nickname=${encodeURIComponent(nickname)}`);
+        const res = await fetch(`/api/players/search?nickname=${encodeURIComponent(query)}`);
         const data = await res.json();
 
         if (res.ok) {
