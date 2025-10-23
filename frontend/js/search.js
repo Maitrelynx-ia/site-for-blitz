@@ -22,18 +22,21 @@ document.addEventListener("DOMContentLoaded", () => {
       // Rechercher les joueurs
       const playerData = await searchPlayer(query);
       // Rechercher les chars
-      const tankData = await getTanksList(null, null); // Filtre optionnel par nation ou tier
+      const tankData = await getTanksList();
 
       let html = "";
 
       // Afficher les résultats des joueurs
-      if (playerData.status === "ok" && playerData.data.length > 0) {
-        const player = playerData.data[0];
-        html += `
-          <h3>👤 Joueur trouvé: ${player.nickname}</h3>
-          <p><strong>ID:</strong> ${player.account_id}</p>
-          <hr/>
-        `;
+      if (playerData.status === "ok" && playerData.data && playerData.data.length > 0) {
+        playerData.data.forEach(player => {
+          html += `
+            <div>
+              <h3>👤 Joueur trouvé: ${player.nickname}</h3>
+              <p><strong>ID:</strong> ${player.account_id}</p>
+            </div>
+            <hr/>
+          `;
+        });
       } else {
         html += "<p>Aucun joueur trouvé.</p>";
       }
@@ -57,9 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      if (!html) html = "<p>Aucun résultat trouvé.</p>";
+      if (!html.trim()) html = "<p>Aucun résultat trouvé.</p>";
       resultsDiv.innerHTML = html;
     } catch (error) {
+      console.error("Erreur:", error);
       resultsDiv.innerHTML = "<p style='color:red;'>Erreur lors de la recherche.</p>";
     }
   }
