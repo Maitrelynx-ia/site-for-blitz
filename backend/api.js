@@ -1,5 +1,5 @@
 // Configuration de base pour l'API Wargaming
-const APPLICATION_ID = "TON_APPLICATION_ID"; // Remplace par ton ID
+const APPLICATION_ID = "0cd52ad2ab52ea7511013106881cc3f7"; // Remplace par ton ID
 const BASE_URL = "https://api.wargaming.net/wotb/";
 
 // Fonction générique pour appeler l'API
