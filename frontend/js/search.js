@@ -1,16 +1,4 @@
-import { searchPlayer, getTanksList } from './api.js';
-
 document.addEventListener("DOMContentLoaded", () => {
-  const searchButton = document.getElementById("search-button");
-  const searchInput = document.getElementById("global-search-input");
-
-  searchButton.addEventListener("click", () => {
-    const value = searchInput.value.trim();
-    if (value) {
-      window.location.href = `search.html?q=${encodeURIComponent(value)}`;
-    }
-  });
-
   async function fetchResults() {
     const params = new URLSearchParams(window.location.search);
     const query = params.get("q");
@@ -20,9 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       // Rechercher les joueurs
-      const playerData = await searchPlayer(query);
+      const playerResponse = await fetch(`/api/search-player?q=${query}`);
+      const playerData = await playerResponse.json();
+
       // Rechercher les chars
-      const tankData = await getTanksList();
+      const tankResponse = await fetch('/api/tanks-list');
+      const tankData = await tankResponse.json();
 
       let html = "";
 

@@ -1,42 +1,34 @@
-// Configuration de base pour l'API Wargaming
-const APPLICATION_ID = "0cd52ad2ab52ea7511013106881cc3f7"; // Remplace par ton ID
-const BASE_URL = "https://api.wargaming.net/wotb/";
+const express = require('express');
+const axios = require('axios');
+const router = express.Router();
+const APPLICATION_ID = '0cd52ad2ab52ea7511013106881cc3f7'; // Remplace par ton ID
 
-// Fonction générique pour appeler l'API
-async function callWargamingAPI(endpoint, params = {}) {
-  const url = new URL(`${BASE_URL}${endpoint}`);
-  params.application_id = APPLICATION_ID;
-
-  // Ajouter les paramètres à l'URL
-  Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
+// Rechercher un joueur
+router.get('/search-player', async (req, res) => {
   try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Erreur API: ${response.status}`);
-    }
-    const data = await response.json();
-    return data;
+    const query = req.query.q;
+    const response = await axios.get(`https://api.wargaming.net/wotb/account/list/`, {
+      params: {
+        application_id: APPLICATION_ID,
+        search: query
+      }
+    });
+    res.json(response.data);
   } catch (error) {
-    console.error("Erreur lors de l'appel API:", error);
-    throw error;
+    res.status(500).json({ error: error.message });
   }
-}
+});
 
-// Rechercher un joueur par nickname
-export async function searchPlayer(nickname) {
-  return callWargamingAPI("account/list/", { search: nickname });
-}
-
-// Récupérer les statistiques d'un joueur
-export async function getPlayerStats(accountId) {
-  return callWargamingAPI("account/info/", { account_id: accountId, fields: "statistics.global" });
-}
-
-// Récupérer la liste des chars (encyclopédie)
-export async function getTanksList(nation = null, tier = null) {
-  const params = {};
-  if (nation) params.nation = nation;
-  if (tier) params.tier = tier;
-  return callWargamingAPI("encyclopedia/tanks/", params);
-}
+// Récupérer la liste des chars
+router.get('/tanks-list', async (req, res) => {
+  try {
+    const response = await axios.get(`https://api.wargaming.net/wotb/encyclopedia/tanks/`, {
+      params: {
+        application_id: APPLICATION_ID
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
