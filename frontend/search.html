@@ -165,86 +165,10 @@ button:hover {
   </header>
 
  <main>
-    <h2>Résultat de recherche</h2>
-    <div id="search-result">Chargement...</div>
+  <h1>Résultats de recherche</h1>
+  <div id="results"></div>
   </main>
 
-  <script>
-    // Fonction utilitaire pour afficher un joueur
-    function renderPlayer(user) {
-      return `
-        <h2>👤 Joueur : ${user.nickname}</h2>
-        <p><strong>Batailles :</strong> ${user.stats.battles}</p>
-        <p><strong>Taux de victoire :</strong> ${user.stats.win_rate}%</p>
-        <p><strong>Taux de survie :</strong> ${user.stats.survival_rate}%</p>
-        <p><strong>Dégâts moyens :</strong> ${user.stats.avg_damage}</p>
-        <p><strong>XP moyen :</strong> ${user.stats.avg_xp}</p>
-        <p><strong>Dommages infligés / reçus :</strong> ${user.stats.damage_ratio}</p>
-        <p><strong>Tanks possédés :</strong> ${user.stats.tanks_owned}</p>
-      `;
-    }
-
-    // Fonction utilitaire pour afficher un char
-    function renderTank(tank) {
-      return `
-        <h2>🚗 Char : ${tank.name}</h2>
-        <p><strong>Niveau :</strong> ${tank.tier}</p>
-        <p><strong>Nation :</strong> ${tank.nation}</p>
-        <p><strong>Type :</strong> ${tank.type}</p>
-      `;
-    }
-
-    // Récupère le paramètre q
-    const params = new URLSearchParams(window.location.search);
-    const query = params.get("q");
-    const resultsDiv = document.getElementById("results");
-
-    async function search(query) {
-      resultsDiv.innerHTML = "⏳ Recherche en cours...";
-      if (!query) {
-        resultsDiv.innerHTML = "<p>Aucun terme de recherche.</p>";
-        return;
-      }
-
-      try {
-        // Essayer d'abord joueur
-        let resp = await fetch(`/api/players/search?nickname=${encodeURIComponent(query)}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data && data.nickname) {
-            resultsDiv.innerHTML = renderPlayer(data);
-            return;
-          }
-        }
-
-        // Sinon essayer char
-        resp = await fetch(`/api/tanks/search?name=${encodeURIComponent(query)}`);
-        if (resp.ok) {
-          const data = await resp.json();
-          if (data && data.tank) {
-            resultsDiv.innerHTML = renderTank(data.tank);
-            return;
-          }
-        }
-
-        resultsDiv.innerHTML = "<p style='color:red;'>Aucun résultat trouvé.</p>";
-      } catch (err) {
-        console.error(err);
-        resultsDiv.innerHTML = "<p style='color:red;'>Erreur lors de la recherche.</p>";
-      }
-    }
-
-    // Lancer la recherche dès l'arrivée sur la page
-    if (query) search(query);
-
-    // Gestion de la barre de recherche globale
-    document.getElementById("global-search-form").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const value = document.getElementById("global-search-input").value.trim();
-      if (value) {
-        window.location.href = `/search.html?q=${encodeURIComponent(value)}`;
-      }
-    });
-  </script>
+  
 </body>
 </html>
