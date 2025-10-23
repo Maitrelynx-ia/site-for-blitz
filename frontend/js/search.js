@@ -55,3 +55,9 @@ document.getElementById("global-search-form").addEventListener("submit", functio
     }
 
     fetchResults();
+    // Dans search.js
+async function filterTanks(nation, tier) {
+  const response = await fetch(`/api/tanks/filter?nation=${nation}&tier=${tier}`);
+  const data = await response.json();
+  displayResults(data);
+}
