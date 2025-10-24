@@ -1,42 +1,24 @@
-// backend/app.js
-const express = require("express");
-const session = require("express-session");
-const path = require("path");
+const express = require('express');
+const cors = require('cors');
+const apiRoutes = require('./routes/api');
+const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/profile');
 const shareRoutes = require('./routes/share');
-require("dotenv").config();
+const donateRoutes = require('./routes/donate');
 
-const authRoutes = require("./routes/auth");
-const shareRoutes = require("./routes/share");
-const apiRoutes = require('./routes/api'); // chemin selon ton projet
-
-//API
-app.use('/api', apiRoutes);
-
-
-// Init
 const app = express();
+const PORT = 3000;
+
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: "wot-secret", resave: false, saveUninitialized: true }));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
-app.use("/auth", authRoutes);
-app.use("/api/share", shareRoutes);
-
-// Frontend
-app.use(express.static(path.join(__dirname, "../frontend")));
-app.get("*", (req, res) =>
-  res.sendFile(path.join(__dirname, "../frontend/index.html")));
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Serveur lancé sur le port ${PORT}`));
-
-app.use(session({
-  secret: 'votre_secret_super_secure',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // mettre à true en HTTPS
-}));
-
+app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
+app.use('/profile', profileRoutes);
+app.use('/share', shareRoutes);
+app.use('/donate', donateRoutes);
+
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
+});
