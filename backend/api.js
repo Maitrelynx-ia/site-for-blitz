@@ -7,7 +7,7 @@ const APPLICATION_ID = '0cd52ad2ab52ea7511013106881cc3f7'; // Remplace par ton I
 router.get('/search-player', async (req, res) => {
   try {
     const query = req.query.q;
-    const response = await axios.get(`https://api.wargaming.net/wotb/account/list/`, {
+    const response = await axios.get(`https://api.wotblitz.eu/wotb/account/list/?application_id=0cd52ad2ab52ea7511013106881cc3f7`, {
       params: {
         application_id: APPLICATION_ID,
         search: query
@@ -22,7 +22,7 @@ router.get('/search-player', async (req, res) => {
 // Récupérer la liste des chars
 router.get('/tanks-list', async (req, res) => {
   try {
-    const response = await axios.get(`https://api.wargaming.net/wotb/encyclopedia/tanks/`, {
+    const response = await axios.get(`https://api.wotblitz.eu/wotb/encyclopedia/vehicles/?application_id=0cd52ad2ab52ea7511013106881cc3f7`, {
       params: {
         application_id: APPLICATION_ID
       }
