@@ -3,146 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <title>Profil - World of Tanks Blitz</title>
-  <style>
+   <style>
     :root {
-  --charcoal: #1E1E1E;
-  --black: #000000;
-  --white: #FFFFFF;
-  --kaki-dark: #556B2F;
-  --kaki: #6B8E23;
-  --hover-kaki: #7BA331;
-  --kaki-light: #9ACD32;
-  --border-color: #333;
-  --light-grey: #ccc;
-}
+      --primary-color: #4a6fa5;
+      --secondary-color: #166088;
+      --accent-color: #4fc3f7;
+      --background-color: #f5f7fa;
+      --text-color: #333;
+      --light-text-color: #fff;
+      --border-color: #ddd;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    body {
+      font-family: 'Roboto', 'Arial', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--charcoal);
-  color: var(--white);
-  line-height: 1.6;
-}
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', 'Arial', sans-serif;
+      color: var(--secondary-color);
+    }
 
-header {
-  background-color: var(--black);
-  padding: 1em 2em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-nav a {
-  color: var(--kaki-light);
-  text-decoration: none;
-  margin: 0 1em;
-  font-weight: bold;
-  transition: color 0.3s;
-}
+    section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: var(--light-text-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
 
-nav a:hover {
-  color: var(--hover-kaki);
-  text-decoration: underline;
-}
+    nav {
+      background-color: var(--secondary-color);
+      padding: 15px 0;
+    }
 
-main {
-  padding: 2em;
-  max-width: 1000px;
-  margin: auto;
-}
+    nav ul {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-section {
-  background-color: var(--black);
-  border: 1px solid var(--kaki-dark);
-  border-radius: 10px;
-  padding: 1.5em;
-  margin-bottom: 2em;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
+    nav ul li {
+      margin: 0 15px;
+    }
 
-h1, h2, h3 {
-  border-bottom: 2px solid var(--kaki);
-  margin-bottom: 0.5em;
-  padding-bottom: 0.3em;
-  color: var(--kaki-light);
-}
+    nav ul li a {
+      color: var(--light-text-color);
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
 
-input, textarea, select {
-  width: 100%;
-  padding: 0.8em;
-  margin-top: 0.5em;
-  border-radius: 5px;
-  border: 1px solid var(--border-color);
-  background-color: var(--charcoal);
-  color: var(--white);
-}
+    nav ul li a:hover {
+      color: var(--accent-color);
+    }
 
-button {
-  background-color: var(--kaki);
-  color: var(--white);
-  padding: 0.7em 1.5em;
-  border: none;
-  border-radius: 5px;
-  margin-top: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+    button, .button {
+      background-color: var(--primary-color);
+      color: var(--light-text-color);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
 
-button:hover {
-  background-color: var(--hover-kaki);
-}
+    button:hover, .button:hover {
+      background-color: var(--accent-color);
+    }
 
-#search-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin-left: auto;
-}
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
 
-#search-bar input {
-  flex: 1;
-  max-width: 250px;
-}
+    a:hover {
+      color: var(--accent-color);
+    }
 
-.card {
-  background-color: #2a2a2a;
-  padding: 1em;
-  border-radius: 8px;
-  border: 1px solid var(--kaki-dark);
-  margin-bottom: 1em;
-}
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
 
-.footer {
-  margin-top: 3em;
-  padding: 1em;
-  text-align: center;
-  background-color: var(--black);
-  border-top: 1px solid var(--border-color);
-  color: var(--light-grey);
-}
+    input, textarea, select {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-family: inherit;
+      font-size: 16px;
+    }
 
-/* Zones de résultats ou d'erreurs */
-.result, .error {
-  margin-top: 1em;
-  padding: 1em;
-  border-radius: 5px;
-}
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+    }
 
-.result {
-  background-color: #263a1f;
-  color: var(--white);
-}
+    .card {
+      background-color: var(--light-text-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s;
+    }
 
-.error {
-  background-color: #5a2a2a;
-  color: #ffaaaa;
-}
-</style> 
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    #results {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    #results .card {
+      padding: 15px;
+    }
+  </style>
 </head>
 <body>
   <header>
