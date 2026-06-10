@@ -197,6 +197,7 @@
                     <code class="bg-slate-600 px-2 py-1 rounded">api.wotblitz.eu/wotb/</code>
                     <span class="text-slate-400"> | ID: </span>
                     <code class="bg-slate-600 px-2 py-1 rounded">0cd52ad2ab52ea7511013106881cc3f7</code>
+                    <span class="text-slate-500 text-xs ml-2">(via proxy CORS)</span>
                     <span id="apiConnectionStatus" class="ml-2">
                         <span class="status-indicator status-offline"></span>
                         <span>Vérification...</span>
@@ -664,13 +665,7 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000);
                 
-                const response = await fetch(testUrl, {
-                    signal: controller.signal,
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await fetchWithProxy(testUrl);
                 
                 clearTimeout(timeoutId);
                 
@@ -701,12 +696,15 @@
         }
         
         // ============================================
-        // Direct Fetch Function (no proxy)
+        // Fetch Function with CORS Proxy
         // ============================================
         
-        async function fetchDirect(url) {
+        const PROXY_URL = 'https://api.allorigins.win/raw?url=';
+        
+        async function fetchWithProxy(url) {
             try {
-                const response = await fetch(url, {
+                const proxyUrl = PROXY_URL + encodeURIComponent(url);
+                const response = await fetch(proxyUrl, {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
@@ -719,9 +717,14 @@
                 
                 return response;
             } catch (error) {
-                console.error('Direct fetch error:', error);
+                console.error('Proxy fetch error:', error);
                 throw error;
             }
+        }
+        
+        async function fetchDirect(url) {
+            // Fallback to direct fetch if proxy fails
+            return fetchWithProxy(url);
         }
         
         // ============================================
