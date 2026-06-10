@@ -1,1337 +1,188 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Consultez les statistiques détaillées des joueurs World of Tanks Blitz - batailles, véhicules, WN8, taux de victoire et plus encore.">
-    <title>WoT Blitz Stats - Statistiques Complètes</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CCW Loader pour les Context Widgets -->
-    <script type="text/javascript">
-    (function(w,d,s,p){
-        var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),i;
-        j.async=true;
-        j.src='//ccw-center.wargaming.net/compiled/loader.min.js';
-        j.setAttribute('id', 'ccw-loader');
-        for(i in p){
-            if (p.hasOwnProperty(i)) {
-                j.setAttribute('data-'+i,p[i]);
-            }
-        }
-        f.parentNode.insertBefore(j,f);
-    })(window,document,'script',{
-        'server':'ccw-center.wargaming.net',
-        'language':'fr',
-        'service':'wotblitz-stats'
-    });
-    </script>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-        }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #f97316, #ef4444);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-        }
-        
-        .progress-bar {
-            background: linear-gradient(90deg, #f97316, #ef4444);
-        }
-        
-        .wn8-unicum { background: linear-gradient(135deg, #a855f7, #ec4899); }
-        .wn8-super { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .wn8-good { background: linear-gradient(135deg, #10b981, #059669); }
-        .wn8-average { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .wn8-bad { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        
-        .nation-ussr { background: #dc2626; }
-        .nation-germany { background: #000000; }
-        .nation-usa { background: #3b82f6; }
-        .nation-china { background: #f97316; }
-        .nation-france { background: #0ea5e9; }
-        .nation-uk { background: #10b981; }
-        .nation-japan { background: #ef4444; }
-        .nation-czech { background: #a855f7; }
-        .nation-sweden { background: #eab308; }
-        .nation-italy { background: #22c55e; }
-        .nation-poland { background: #ffffff; border: 2px solid #1f2937; color: #1f2937; }
-        
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid #f97316;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .tank-icon {
-            filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.6));
-        }
-        
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .status-online { background-color: #22c55e; box-shadow: 0 0 6px #22c55e; }
-        .status-offline { background-color: #ef4444; box-shadow: 0 0 6px #ef4444; }
-        
-        .ccw-word {
-            border-bottom: 1px dotted #f97316;
-            cursor: help;
-            padding-bottom: 1px;
-        }
-        
-        .ccw-word:hover {
-            border-bottom-color: #ef4444;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Accueil - WoT Blitz</title>
+  <style>
+:root {
+  --charcoal: #1E1E1E;
+  --black: #000000;
+  --white: #FFFFFF;
+  --kaki-dark: #556B2F;
+  --kaki: #6B8E23;
+  --hover-kaki: #7BA331;
+  --kaki-light: #9ACD32;
+  --border-color: #333;
+  --light-grey: #ccc;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--charcoal);
+  color: var(--white);
+  line-height: 1.6;
+}
+
+header {
+  background-color: var(--black);
+  padding: 1em 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav a {
+  color: var(--kaki-light);
+  text-decoration: none;
+  margin: 0 1em;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--hover-kaki);
+  text-decoration: underline;
+}
+
+main {
+  padding: 2em;
+  max-width: 1000px;
+  margin: auto;
+}
+
+section {
+  background-color: var(--black);
+  border: 1px solid var(--kaki-dark);
+  border-radius: 10px;
+  padding: 1.5em;
+  margin-bottom: 2em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid var(--kaki);
+  margin-bottom: 0.5em;
+  padding-bottom: 0.3em;
+  color: var(--kaki-light);
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.8em;
+  margin-top: 0.5em;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  background-color: var(--charcoal);
+  color: var(--white);
+}
+
+button {
+  background-color: var(--kaki);
+  color: var(--white);
+  padding: 0.7em 1.5em;
+  border: none;
+  border-radius: 5px;
+  margin-top: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: var(--hover-kaki);
+}
+
+#search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-left: auto;
+}
+
+#search-bar input {
+  flex: 1;
+  max-width: 250px;
+}
+
+.card {
+  background-color: #2a2a2a;
+  padding: 1em;
+  border-radius: 8px;
+  border: 1px solid var(--kaki-dark);
+  margin-bottom: 1em;
+}
+
+.footer {
+  margin-top: 3em;
+  padding: 1em;
+  text-align: center;
+  background-color: var(--black);
+  border-top: 1px solid var(--border-color);
+  color: var(--light-grey);
+}
+
+/* Zones de résultats ou d'erreurs */
+.result, .error {
+  margin-top: 1em;
+  padding: 1em;
+  border-radius: 5px;
+}
+
+.result {
+  background-color: #263a1f;
+  color: var(--white);
+}
+
+.error {
+  background-color: #5a2a2a;
+  color: #ffaaaa;
+}
+  </style> 
 </head>
-<body class="min-h-screen text-slate-100">
-    <div class="container mx-auto px-4 py-6 max-w-7xl">
-        
-        <!-- Header -->
-        <header class="text-center mb-8">
-            <div class="flex items-center justify-center gap-4 mb-4">
-                <i class="fas fa-tank text-orange-500 text-5xl tank-icon pulse"></i>
-                <div>
-                    <h1 class="text-4xl md:text-5xl font-bold gradient-text">
-                        World of Tanks Blitz
-                    </h1>
-                    <p class="text-xl text-slate-400">Statistiques des Joueurs & Véhicules</p>
-                </div>
-            </div>
-        </header>
+<body>
+  <header>
+    <h1>World of Tanks Blitz</h1>
+    <nav>
+     <div style="flex-grow: 1;">
+      <a href="frontend/profile.html">Profil</a></li>
+      <a href="frontend/share.html">Partager</a></li>
+      <a href="frontend/search.html"> Recherche</a>
+      <a href="frontend/donate.html">Faire un don</a></li>
+      <a id="login-logout"><a href="frontend/login.html">Se connecter</a></li>
+     </div>
+     <span id="auth-link" style="margin-left: 1em;"></span>
+    </nav>
+  </header>
+  
+    <main class="don">
+    <h1>Soutenir la Communauté</h1>
+    <p>Vos dons permettent de maintenir le site et d'organiser des événements pour la communauté.</p>
 
-        <!-- Search Section -->
-        <section class="mb-8">
-            <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-                <div class="flex flex-col md:flex-row gap-4 items-center">
-                    <div class="flex-1 relative">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input 
-                            type="text" 
-                            id="searchInput"
-                            placeholder="Rechercher un joueur (ex: Rustroff, SerB)..."
-                            class="w-full pl-12 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder:text-slate-400 focus:outline-none focus:border-orange-500"
-                        >
-                    </div>
-                    <button 
-                        id="searchBtn"
-                        class="bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-all flex items-center gap-2"
-                    >
-                        <i class="fas fa-search"></i>
-                        Rechercher
-                    </button>
-                </div>
-                
-                <!-- Loading -->
-                <div id="loading" class="mt-4 hidden text-center">
-                    <div class="loading-spinner mx-auto mb-2"></div>
-                    <p class="text-sm text-slate-400">Recherche en cours...</p>
-                </div>
-                
-                <!-- Error -->
-                <div id="error" class="mt-4 hidden p-4 bg-red-900/30 border border-red-700 rounded-lg">
-                    <p class="text-red-400 text-sm"></p>
-                </div>
-                
-                <!-- Success Message -->
-                <div id="success" class="mt-4 hidden p-4 bg-green-900/30 border border-green-700 rounded-lg">
-                    <p class="text-green-400 text-sm flex items-center gap-2">
-                        <i class="fas fa-check-circle"></i>
-                        <span id="successMessage"></span>
-                    </p>
-                </div>
-                
-                <!-- API Info -->
-                <div class="mt-4 p-3 bg-slate-700/50 border border-slate-600 rounded-lg text-sm">
-                    <i class="fas fa-server text-orange-500 mr-2"></i>
-                    <strong>API:</strong> 
-                    <code class="bg-slate-600 px-2 py-1 rounded">api.wotblitz.eu/wotb/</code>
-                    <span class="text-slate-400"> | ID: </span>
-                    <code class="bg-slate-600 px-2 py-1 rounded">0cd52ad2ab52ea7511013106881cc3f7</code>
-                    <span class="text-slate-500 text-xs ml-2">(via proxy CORS)</span>
-                    <span id="apiConnectionStatus" class="ml-2">
-                        <span class="status-indicator status-offline"></span>
-                        <span>Vérification...</span>
-                    </span>
-                </div>
-            </div>
-        </section>
+  <form id="don-form" class="form-don">
+    <label for="amount">Montant du don (€) :</label>
+    <input type="number" id="amount" name="amount" placeholder="5" min="1" required />
 
-        <!-- Search Results -->
-        <section id="searchResultsSection" class="hidden mb-6">
-            <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold flex items-center gap-2">
-                        <i class="fas fa-list text-orange-500"></i>
-                        Résultats de recherche
-                    </h3>
-                    <span class="text-sm text-slate-400">
-                        <span id="resultCount">0</span> résultat(s)
-                    </span>
-                </div>
-                <div id="resultsList" class="max-h-60 overflow-y-auto space-y-2"></div>
-            </div>
-        </section>
+    <label for="nickname">Pseudo (facultatif pour rester anonyme) :</label>
+    <input type="text" id="nickname" name="nickname" placeholder="Anonyme" />
 
-        <!-- Player Stats Section -->
-        <section id="playerSection" class="hidden">
-            <!-- Player Header -->
-            <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6 fade-in">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div class="flex items-center gap-6">
-                        <div class="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center text-4xl font-bold shadow-lg">
-                            <span id="playerInitial">?</span>
-                        </div>
-                        <div>
-                            <h2 id="playerName" class="text-3xl font-bold gradient-text"></h2>
-                            <p id="playerInfo" class="text-slate-400 mt-1"></p>
-                        </div>
-                    </div>
-                    <div class="flex gap-4">
-                        <span class="px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-sm">
-                            <i class="fas fa-id-card mr-1"></i>ID: <span id="playerId">-</span>
-                        </span>
-                        <span class="px-4 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-sm">
-                            <i class="fas fa-star mr-1"></i>Rating: <span id="globalRating">0</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
+    <button type="submit"> Faire un don</button>
+  </form>
 
-            <!-- Main Stats Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 card-hover fade-in">
-                    <div class="flex justify-between items-start mb-2">
-                        <i class="fas fa-sword text-orange-500 text-2xl"></i>
-                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded-full">Batailles</span>
-                    </div>
-                    <div class="text-3xl font-bold" id="totalBattles">0</div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 card-hover fade-in" style="animation-delay: 0.1s">
-                    <div class="flex justify-between items-start mb-2">
-                        <i class="fas fa-trophy text-green-500 text-2xl"></i>
-                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded-full">Victoires</span>
-                    </div>
-                    <div class="text-3xl font-bold text-green-500" id="winRate">0%</div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 card-hover fade-in" style="animation-delay: 0.2s">
-                    <div class="flex justify-between items-start mb-2">
-                        <i class="fas fa-chart-line text-purple-500 text-2xl"></i>
-                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded-full">WN8</span>
-                    </div>
-                    <div class="text-3xl font-bold" id="wn8">0</div>
-                    <div class="mt-2">
-                        <span id="wn8Badge" class="px-2 py-1 rounded-full text-xs font-semibold"></span>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 card-hover fade-in" style="animation-delay: 0.3s">
-                    <div class="flex justify-between items-start mb-2">
-                        <i class="fas fa-crosshairs text-red-500 text-2xl"></i>
-                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded-full">Dégâts/moy</span>
-                    </div>
-                    <div class="text-3xl font-bold text-red-500" id="avgDamage">0</div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 card-hover fade-in" style="animation-delay: 0.4s">
-                    <div class="flex justify-between items-start mb-2">
-                        <i class="fas fa-skull text-blue-500 text-2xl"></i>
-                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded-full">Frags/moy</span>
-                    </div>
-                    <div class="text-3xl font-bold text-blue-500" id="avgFrags">0</div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-4 card-hover fade-in" style="animation-delay: 0.5s">
-                    <div class="flex justify-between items-start mb-2">
-                        <i class="fas fa-shield-alt text-yellow-500 text-2xl"></i>
-                        <span class="text-xs text-slate-400 bg-slate-700 px-2 py-1 rounded-full">Survie</span>
-                    </div>
-                    <div class="text-3xl font-bold text-yellow-500" id="survivalRate">0%</div>
-                </div>
-            </div>
+    <section>
+      <h2>Merci à nos donateurs :</h2>
+      <ul id="liste-donateurs"></ul>
+    </section>
+  </main>
 
-            <!-- Win Rate Progress Bar -->
-            <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6 fade-in" style="animation-delay: 0.6s">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm text-slate-400">Taux de victoire global</span>
-                    <span class="text-lg font-bold" id="winRatePercent">0%</span>
-                </div>
-                <div class="w-full bg-slate-700 rounded-full h-4">
-                    <div id="winRateBar" class="progress-bar h-4 rounded-full" style="width: 0%"></div>
-                </div>
-                <div class="flex justify-between text-xs text-slate-500 mt-2">
-                    <span><i class="fas fa-check text-green-500 mr-1"></i><span id="wins">0</span> victoires</span>
-                    <span><i class="fas fa-times text-red-500 mr-1"></i><span id="losses">0</span> défaites</span>
-                    <span><i class="fas fa-minus text-yellow-500 mr-1"></i><span id="draws">0</span> nuls</span>
-                </div>
-                <p class="text-xs text-slate-500 mt-3 text-center">
-                    <i class="fas fa-chart-bar mr-1"></i>
-                    <span id="battleCount">0</span> batailles jouées
-                </p>
-            </div>
+  <footer>
+    <p>&copy; 2025 World of Tanks Blitz Community</p>
+  </footer>
 
-            <!-- Detailed Stats -->
-            <div class="grid md:grid-cols-2 gap-6 mb-6">
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 card-hover fade-in" style="animation-delay: 0.7s">
-                    <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="fas fa-fire text-orange-500"></i>
-                        Performances
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Dégâts totaux</div>
-                            <div class="text-2xl font-bold text-orange-500" id="totalDamage">0</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Frags totaux</div>
-                            <div class="text-2xl font-bold text-purple-500" id="totalFrags">0</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Points de défense</div>
-                            <div class="text-2xl font-bold text-green-500" id="defensePoints">0</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Points de capture</div>
-                            <div class="text-2xl font-bold text-blue-500" id="capturePoints">0</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 card-hover fade-in" style="animation-delay: 0.8s">
-                    <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
-                        <i class="fas fa-eye text-cyan-500"></i>
-                        Repérage & Support
-                    </h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Repérages</div>
-                            <div class="text-2xl font-bold text-cyan-500" id="totalSpotted">0</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Repérages/moy</div>
-                            <div class="text-2xl font-bold text-cyan-400" id="avgSpotted">0</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Efficacité</div>
-                            <div class="text-2xl font-bold text-emerald-500" id="efficiency">0%</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-sm text-slate-400 mb-1">Ratio K/D</div>
-                            <div class="text-2xl font-bold text-rose-500" id="kdRatio">0.00</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vehicles Section -->
-            <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 fade-in" style="animation-delay: 0.9s">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold flex items-center gap-2">
-                        <i class="fas fa-tank mr-2 text-orange-500"></i>
-                        Véhicules (<span id="vehicleCount">0</span>)
-                    </h3>
-                    <div class="flex items-center gap-4">
-                        <span class="text-sm text-slate-400">Trier par:</span>
-                        <select id="sortSelect" class="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-orange-500">
-                            <option value="battles">Batailles (↓)</option>
-                            <option value="winRate">Taux de victoire (↓)</option>
-                            <option value="damage">Dégâts moyens (↓)</option>
-                            <option value="frags">Frags moyens (↓)</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div id="vehiclesList" class="space-y-4"></div>
-                
-                <!-- Pagination -->
-                <div id="pagination" class="flex items-center justify-center gap-4 mt-6 hidden">
-                    <button id="prevPage" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-chevron-left mr-2"></i>Précédent
-                    </button>
-                    <span class="text-sm text-slate-400" id="pageInfo"></span>
-                    <button id="nextPage" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        Suivant<i class="fas fa-chevron-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Welcome Section -->
-        <section id="welcomeSection">
-            <div class="text-center py-16">
-                <i class="fas fa-tank text-orange-500 text-6xl mb-6 tank-icon pulse"></i>
-                <h2 class="text-3xl font-bold mb-4">Bienvenue sur WoT Blitz Stats</h2>
-                <p class="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
-                    Consultez les statistiques détaillées des joueurs World of Tanks Blitz.
-                </p>
-                
-                <!-- Important Notice -->
-                <div class="bg-orange-900/30 border border-orange-700 rounded-xl p-6 mb-6 max-w-4xl mx-auto">
-                    <div class="flex items-start gap-3">
-                        <i class="fas fa-exclamation-triangle text-orange-500 text-xl mt-1"></i>
-                        <div class="flex-1 text-left">
-                            <h4 class="font-semibold text-orange-400 mb-2">
-                                <i class="fas fa-server mr-1"></i>
-                                Pour que le site fonctionne correctement
-                            </h4>
-                            <p class="text-sm text-slate-300 mb-3">
-                                Ce site utilise l'API officielle <strong>api.wotblitz.eu/wotb/</strong> avec l'ID: <code class="bg-slate-700 px-1 rounded">0cd52ad2ab52ea7511013106881cc3f7</code>.
-                            </p>
-                            <p class="text-sm text-slate-300 mb-2">
-                                <strong>Pour éviter les erreurs CORS, vous devez :</strong>
-                            </p>
-                            <ol class="text-sm text-slate-300 list-decimal list-inside space-y-1 ml-4">
-                                <li><strong>Ouvrir ce fichier via un serveur web local</strong> (méthode recommandée)</li>
-                                <li>Ou héberger ce fichier sur un site web (GitHub Pages, Netlify, etc.)</li>
-                                <li>Ou utiliser une extension navigateur pour désactiver CORS</li>
-                            </ol>
-                            <div class="mt-4 bg-slate-800/50 p-3 rounded-lg">
-                                <code class="text-orange-400">python -m http.server 8000</code>
-                                <p class="text-xs text-slate-400 mt-1">Puis ouvrez http://localhost:8000 dans votre navigateur</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mb-6 max-w-4xl mx-auto">
-                    <h3 class="text-lg font-semibold mb-4 flex items-center justify-center gap-2">
-                        <i class="fas fa-lightbulb text-orange-500"></i>
-                        Comment utiliser ce site ?
-                    </h3>
-                    <div class="grid md:grid-cols-3 gap-4 text-left">
-                        <div class="bg-slate-700/30 rounded-lg p-4">
-                            <div class="text-2xl mb-2">1️⃣</div>
-                            <h4 class="font-semibold mb-2">Recherchez un joueur</h4>
-                            <p class="text-sm text-slate-400">Entrez un nom de joueur (minimum 3 caractères).</p>
-                        </div>
-                        <div class="bg-slate-700/30 rounded-lg p-4">
-                            <div class="text-2xl mb-2">2️⃣</div>
-                            <h4 class="font-semibold mb-2">Sélectionnez le joueur</h4>
-                            <p class="text-sm text-slate-400">Cliquez sur le joueur dans les résultats.</p>
-                        </div>
-                        <div class="bg-slate-700/30 rounded-lg p-4">
-                            <div class="text-2xl mb-2">3️⃣</div>
-                            <h4 class="font-semibold mb-2">Survolez les éléments</h4>
-                            <p class="text-sm text-slate-400">Passez la souris sur les noms de chars et joueurs pour plus d'infos !</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-6 max-w-4xl mx-auto">
-                    <h3 class="text-lg font-semibold mb-4 flex items-center justify-center gap-2">
-                        <i class="fas fa-gamepad text-orange-500"></i>
-                        Essayez ces joueurs connus
-                    </h3>
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <button onclick="document.getElementById('searchInput').value='Rustroff'; document.getElementById('searchBtn').click()" 
-                                class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition-colors">
-                            Rustroff
-                        </button>
-                        <button onclick="document.getElementById('searchInput').value='SerB'; document.getElementById('searchBtn').click()" 
-                                class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition-colors">
-                            SerB
-                        </button>
-                        <button onclick="document.getElementById('searchInput').value='The_Chieftain_WG'; document.getElementById('searchBtn').click()" 
-                                class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition-colors">
-                            The_Chieftain_WG
-                        </button>
-                        <button onclick="document.getElementById('searchInput').value='Ariton'; document.getElementById('searchBtn').click()" 
-                                class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition-colors">
-                            Ariton
-                        </button>
-                        <button onclick="document.getElementById('searchInput').value='Circonflexes'; document.getElementById('searchBtn').click()" 
-                                class="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg transition-colors">
-                            Circonflexes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer avec mentions légales -->
-        <footer class="text-center mt-12 p-6 bg-slate-900/50 border-t border-slate-800">
-            <div class="mb-4">
-                <p class="text-sm text-slate-400">
-                    © 2026 Eric Rustroff. Tous droits réservés.
-                </p>
-                <p class="text-xs text-slate-500 mt-2">
-                    Données fournies par <a href="https://wotblitz.eu/" class="text-orange-400 hover:text-orange-300">World of Tanks Blitz</a>
-                    | © <a href="https://www.wargaming.net/" class="text-orange-400 hover:text-orange-300">Wargaming.net</a>. All rights reserved.
-                </p>
-            </div>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-xs text-slate-500">
-                <a href="https://support.wargaming.net/" class="hover:text-orange-400 transition-colors">
-                    <i class="fas fa-headset mr-1"></i> Centre de support Wargaming
-                </a>
-                <a href="https://developers.wargaming.net/" class="hover:text-orange-400 transition-colors">
-                    <i class="fas fa-code mr-1"></i> Documentation API
-                </a>
-                <a href="https://developers.wargaming.net/documentation/guide/getting-started/" class="hover:text-orange-400 transition-colors">
-                    <i class="fas fa-book mr-1"></i> Guide de démarrage
-                </a>
-            </div>
-        </footer>
-    </div>
-
-    <script>
-        // ============================================
-        // Configuration
-        // ============================================
-        
-        const APP_ID = '0cd52ad2ab52ea7511013106881cc3f7';
-        const BASE_URL = 'https://api.wotblitz.eu/wotb';
-        const CACHE_EXPIRY = 3600000; // 1 heure en ms
-        
-        // State
-        let state = {
-            playerData: null,
-            playerTanksData: null,
-            vehicleInfoData: null,
-            allVehicles: [],
-            filteredVehicles: [],
-            currentPage: 1,
-            vehiclesPerPage: 10,
-            selectedAccountId: null,
-            isLoading: false,
-            cache: {}
-        };
-        
-        // ============================================
-        // Constants
-        // ============================================
-        
-        const nations = {
-            'ussr': { name: 'URSS', color: 'nation-ussr', icon: '🇷🇺' },
-            'germany': { name: 'Allemagne', color: 'nation-germany', icon: '🇩🇪' },
-            'usa': { name: 'États-Unis', color: 'nation-usa', icon: '🇺🇸' },
-            'china': { name: 'Chine', color: 'nation-china', icon: '🇨🇳' },
-            'france': { name: 'France', color: 'nation-france', icon: '🇫🇷' },
-            'uk': { name: 'Royaume-Uni', color: 'nation-uk', icon: '🇬🇧' },
-            'japan': { name: 'Japon', color: 'nation-japan', icon: '🇯🇵' },
-            'czech': { name: 'Tchèque', color: 'nation-czech', icon: '🇨🇿' },
-            'sweden': { name: 'Suède', color: 'nation-sweden', icon: '🇸🇪' },
-            'italy': { name: 'Italie', color: 'nation-italy', icon: '🇮🇹' },
-            'poland': { name: 'Pologne', color: 'nation-poland', icon: '🇵🇱' }
-        };
-        
-        const vehicleTypes = {
-            'lightTank': { name: 'Char léger', icon: '⚡' },
-            'mediumTank': { name: 'Char moyen', icon: '🏃' },
-            'heavyTank': { name: 'Char lourd', icon: '🛡️' },
-            'AT-SPG': { name: 'Chasseur de chars', icon: '🎯' },
-            'SPG': { name: 'Artillerie', icon: '💥' }
-        };
-        
-        // ============================================
-        // DOM Elements
-        // ============================================
-        
-        const elements = {
-            searchInput: document.getElementById('searchInput'),
-            searchBtn: document.getElementById('searchBtn'),
-            loading: document.getElementById('loading'),
-            error: document.getElementById('error'),
-            success: document.getElementById('success'),
-            successMessage: document.getElementById('successMessage'),
-            apiConnectionStatus: document.getElementById('apiConnectionStatus'),
-            
-            searchResultsSection: document.getElementById('searchResultsSection'),
-            resultsList: document.getElementById('resultsList'),
-            resultCount: document.getElementById('resultCount'),
-            
-            playerSection: document.getElementById('playerSection'),
-            welcomeSection: document.getElementById('welcomeSection'),
-            
-            playerName: document.getElementById('playerName'),
-            playerInfo: document.getElementById('playerInfo'),
-            playerId: document.getElementById('playerId'),
-            playerInitial: document.getElementById('playerInitial'),
-            globalRating: document.getElementById('globalRating'),
-            
-            totalBattles: document.getElementById('totalBattles'),
-            winRate: document.getElementById('winRate'),
-            wn8: document.getElementById('wn8'),
-            wn8Badge: document.getElementById('wn8Badge'),
-            avgDamage: document.getElementById('avgDamage'),
-            avgFrags: document.getElementById('avgFrags'),
-            survivalRate: document.getElementById('survivalRate'),
-            wins: document.getElementById('wins'),
-            losses: document.getElementById('losses'),
-            draws: document.getElementById('draws'),
-            winRatePercent: document.getElementById('winRatePercent'),
-            winRateBar: document.getElementById('winRateBar'),
-            battleCount: document.getElementById('battleCount'),
-            totalDamage: document.getElementById('totalDamage'),
-            totalFrags: document.getElementById('totalFrags'),
-            defensePoints: document.getElementById('defensePoints'),
-            capturePoints: document.getElementById('capturePoints'),
-            totalSpotted: document.getElementById('totalSpotted'),
-            avgSpotted: document.getElementById('avgSpotted'),
-            efficiency: document.getElementById('efficiency'),
-            kdRatio: document.getElementById('kdRatio'),
-            
-            vehicleCount: document.getElementById('vehicleCount'),
-            vehiclesList: document.getElementById('vehiclesList'),
-            sortSelect: document.getElementById('sortSelect'),
-            pagination: document.getElementById('pagination'),
-            prevPage: document.getElementById('prevPage'),
-            nextPage: document.getElementById('nextPage'),
-            pageInfo: document.getElementById('pageInfo')
-        };
-        
-        // ============================================
-        // Initialization
-        // ============================================
-        
-        function init() {
-            // Setup event listeners
-            elements.searchBtn.addEventListener('click', searchPlayers);
-            elements.searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') searchPlayers();
-            });
-            elements.sortSelect.addEventListener('change', () => {
-                state.currentPage = 1;
-                sortAndRenderVehicles();
-            });
-            elements.prevPage.addEventListener('click', () => changePage(-1));
-            elements.nextPage.addEventListener('click', () => changePage(1));
-            
-            // Check API connection on load
-            checkAPIConnection();
-            
-            // Show welcome section
-            showSection('welcome');
-        }
-        
-        // ============================================
-        // API Connection Check
-        // ============================================
-        
-        async function checkAPIConnection() {
-            try {
-                const testUrl = `${BASE_URL}/account/list/?application_id=${APP_ID}&search=test&type=exact`;
-                
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-                
-                const response = await fetchWithProxy(testUrl);
-                
-                clearTimeout(timeoutId);
-                
-                if (response.ok) {
-                    updateAPIStatus(true);
-                } else {
-                    updateAPIStatus(false);
-                }
-            } catch (error) {
-                updateAPIStatus(false, error.message);
-            }
-        }
-        
-        function updateAPIStatus(online, errorMsg = null) {
-            const statusElement = elements.apiConnectionStatus;
-            const indicator = statusElement.querySelector('.status-indicator');
-            const textSpan = statusElement.querySelector('span:last-child');
-            
-            if (online) {
-                indicator.classList.remove('status-offline');
-                indicator.classList.add('status-online');
-                textSpan.textContent = 'Connecté';
-            } else {
-                indicator.classList.remove('status-online');
-                indicator.classList.add('status-offline');
-                textSpan.textContent = errorMsg ? `Hors ligne (${errorMsg})` : 'Hors ligne (CORS)';
-            }
-        }
-        
-        // ============================================
-        // Fetch Function with CORS Proxy
-        // ============================================
-        
-        const PROXY_URL = 'https://api.allorigins.win/raw?url=';
-        
-        async function fetchWithProxy(url) {
-            try {
-                const proxyUrl = PROXY_URL + encodeURIComponent(url);
-                const response = await fetch(proxyUrl, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                return response;
-            } catch (error) {
-                console.error('Proxy fetch error:', error);
-                throw error;
-            }
-        }
-        
-        async function fetchDirect(url) {
-            // Fallback to direct fetch if proxy fails
-            return fetchWithProxy(url);
-        }
-        
-        // ============================================
-        // Search Functionality
-        // ============================================
-        
-        async function searchPlayers() {
-            const query = elements.searchInput.value.trim();
-            
-            if (query.length < 3) {
-                showError('Veuillez entrer au moins 3 caractères.');
-                return;
-            }
-            
-            if (state.isLoading) {
-                showError('Recherche déjà en cours, veuillez patienter.');
-                return;
-            }
-            
-            showLoading(true);
-            hideError();
-            hideSuccess();
-            
-            try {
-                // Check cache first
-                const cacheKey = `search_${query}`;
-                if (state.cache[cacheKey] && state.cache[cacheKey].timestamp > Date.now() - CACHE_EXPIRY) {
-                    displayResults(state.cache[cacheKey].data);
-                    showSection('results');
-                    showLoading(false);
-                    return;
-                }
-                
-                const searchUrl = `${BASE_URL}/account/list/?application_id=${APP_ID}&search=${encodeURIComponent(query)}&type=exact`;
-                
-                const response = await fetchDirect(searchUrl);
-                const data = await response.json();
-                
-                if (data.status === 'ok' && data.data && data.data.length > 0) {
-                    // Cache the results
-                    state.cache[cacheKey] = {
-                        data: data,
-                        timestamp: Date.now()
-                    };
-                    
-                    displayResults(data);
-                    showSection('results');
-                    showSuccess(`Trouvé ${data.data.length} joueur(s) correspondant à "${query}"`);
-                } else {
-                    showError(`Aucun joueur trouvé avec le nom "${query}". Vérifiez l'orthographe.`);
-                }
-            } catch (err) {
-                console.error('Error searching players:', err);
-                showError(`Erreur: ${err.message}. Vérifiez que vous utilisez un serveur web local.`);
-            } finally {
-                showLoading(false);
-            }
-        }
-        
-        function displayResults(data) {
-            elements.resultsList.innerHTML = '';
-            elements.resultCount.textContent = data.meta.count;
-            
-            data.data.forEach(player => {
-                const button = document.createElement('button');
-                button.className = 'w-full text-left p-3 bg-slate-700/50 hover:bg-slate-600/50 border border-slate-600 rounded-lg transition-colors flex items-center gap-3 group';
-                button.innerHTML = `
-                    <i class="fas fa-user text-slate-400 group-hover:text-orange-500 transition-colors"></i>
-                    <span class="flex-1 font-medium">
-                        <span class="ccw-word" data-type="user_wotb__eu">${player.nickname}</span>
-                    </span>
-                    <span class="px-3 py-1 bg-slate-600/50 group-hover:bg-slate-500/50 rounded text-xs text-slate-300 transition-colors">
-                        ID: ${player.account_id}
-                    </span>
-                `;
-                button.onclick = () => selectPlayer(player.account_id, player.nickname);
-                elements.resultsList.appendChild(button);
-            });
-        }
-        
-        // ============================================
-        // Player Data
-        // ============================================
-        
-        async function selectPlayer(accountId, nickname) {
-            state.selectedAccountId = accountId;
-            elements.searchInput.value = nickname;
-            showLoading(true);
-            hideError();
-            hideSuccess();
-            
-            try {
-                // Check cache first
-                const cacheKey = `player_${accountId}`;
-                if (state.cache[cacheKey] && state.cache[cacheKey].timestamp > Date.now() - CACHE_EXPIRY) {
-                    const cachedData = state.cache[cacheKey];
-                    state.playerData = cachedData.playerData;
-                    state.playerTanksData = cachedData.playerTanksData;
-                    state.vehicleInfoData = cachedData.vehicleInfoData;
-                    
-                    processVehicles();
-                    displayPlayerData(nickname);
-                    sortAndRenderVehicles();
-                    showSection('player');
-                    showLoading(false);
-                    return;
-                }
-                
-                // Fetch player info with optimized fields
-                const infoFields = [
-                    'nickname', 'account_id', 'created_at', 'updated_at', 'global_rating',
-                    'statistics.all.battles', 'statistics.all.wins', 'statistics.all.losses',
-                    'statistics.all.draws', 'statistics.all.damage_dealt', 'statistics.all.frags',
-                    'statistics.all.spotted', 'statistics.all.capture_points', 'statistics.all.defense_points'
-                ].join(',');
-                
-                const infoUrl = `${BASE_URL}/account/info/?application_id=${APP_ID}&account_id=${accountId}&fields=${infoFields}`;
-                
-                const infoResponse = await fetchDirect(infoUrl);
-                const infoData = await infoResponse.json();
-                
-                if (infoData.status !== 'ok' || !infoData.data[accountId]) {
-                    const errorMsg = infoData.error?.message || 'Impossible de récupérer les données du joueur';
-                    throw new Error(errorMsg);
-                }
-                
-                state.playerData = infoData.data[accountId];
-                
-                // Fetch player tanks with optimized fields
-                const tanksFields = [
-                    'tank_id', 'mark_of_mastery',
-                    'statistics.all.battles', 'statistics.all.wins',
-                    'statistics.all.damage_dealt', 'statistics.all.frags',
-                    'statistics.all.spotted', 'statistics.all.capture_points',
-                    'statistics.all.defense_points', 'statistics.all.survival_battles'
-                ].join(',');
-                
-                const tanksUrl = `${BASE_URL}/account/tanks/?application_id=${APP_ID}&account_id=${accountId}&fields=${tanksFields}`;
-                
-                const tanksResponse = await fetchDirect(tanksUrl);
-                const tanksData = await tanksResponse.json();
-                
-                if (tanksData.status === 'ok') {
-                    state.playerTanksData = tanksData;
-                }
-                
-                // Get vehicle IDs for encyclopedia
-                const vehicleIds = state.playerTanksData && state.playerTanksData.data && state.playerTanksData.data[accountId]
-                    ? state.playerTanksData.data[accountId].map(v => v.tank_id)
-                    : [];
-                
-                if (vehicleIds.length > 0) {
-                    const vehicleIdsString = vehicleIds.join(',');
-                    const vehicleFields = 'name,short_name,nation,tier,type,is_premium,images.small_icon';
-                    const vehicleUrl = `${BASE_URL}/encyclopedia/vehicles/?application_id=${APP_ID}&tank_id=${vehicleIdsString}&fields=${vehicleFields}`;
-                    
-                    const vehicleResponse = await fetchDirect(vehicleUrl);
-                    const vehicleData = await vehicleResponse.json();
-                    
-                    if (vehicleData.status === 'ok') {
-                        state.vehicleInfoData = vehicleData;
-                    }
-                }
-                
-                // Cache the data
-                state.cache[cacheKey] = {
-                    playerData: state.playerData,
-                    playerTanksData: state.playerTanksData,
-                    vehicleInfoData: state.vehicleInfoData,
-                    timestamp: Date.now()
-                };
-                
-                // Process and display
-                processVehicles();
-                displayPlayerData(nickname);
-                sortAndRenderVehicles();
-                
-                // Show player section
-                showSection('player');
-                showSuccess(`Statistiques chargées pour ${nickname}!`);
-                
-            } catch (err) {
-                console.error('Error fetching player data:', err);
-                showError(`Erreur: ${err.message}`);
-            } finally {
-                showLoading(false);
-            }
-        }
-        
-        function processVehicles() {
-            if (!state.playerTanksData || !state.playerTanksData.data || !state.playerTanksData.data[state.selectedAccountId]) {
-                state.allVehicles = [];
-                state.filteredVehicles = [];
-                return;
-            }
-            
-            state.allVehicles = state.playerTanksData.data[state.selectedAccountId].map(vehicle => {
-                const vehicleInfo = state.vehicleInfoData && state.vehicleInfoData.data && state.vehicleInfoData.data[vehicle.tank_id]
-                    ? state.vehicleInfoData.data[vehicle.tank_id]
-                    : null;
-                
-                const stats = vehicle.statistics.all;
-                const winRate = stats.battles > 0 ? (stats.wins / stats.battles) * 100 : 0;
-                const avgDamage = stats.battles > 0 ? stats.damage_dealt / stats.battles : 0;
-                const avgFrags = stats.battles > 0 ? stats.frags / stats.battles : 0;
-                const survivalRate = stats.battles > 0 ? (stats.survival_battles / stats.battles) * 100 : 0;
-                
-                return {
-                    ...vehicle,
-                    info: vehicleInfo,
-                    winRate,
-                    avgDamage,
-                    avgFrags,
-                    survivalRate
-                };
-            });
-            
-            state.filteredVehicles = [...state.allVehicles];
-            state.currentPage = 1;
-        }
-        
-        function sortAndRenderVehicles() {
-            sortVehicles();
-            renderVehicles();
-        }
-        
-        function sortVehicles() {
-            const sortBy = elements.sortSelect.value;
-            
-            state.filteredVehicles.sort((a, b) => {
-                switch (sortBy) {
-                    case 'battles':
-                        return b.statistics.all.battles - a.statistics.all.battles;
-                    case 'winRate':
-                        return b.winRate - a.winRate;
-                    case 'damage':
-                        return b.avgDamage - a.avgDamage;
-                    case 'frags':
-                        return b.avgFrags - a.avgFrags;
-                    default:
-                        return 0;
-                }
-            });
-        }
-        
-        function changePage(delta) {
-            const totalPages = Math.ceil(state.filteredVehicles.length / state.vehiclesPerPage);
-            const newPage = state.currentPage + delta;
-            
-            if (newPage >= 1 && newPage <= totalPages) {
-                state.currentPage = newPage;
-                renderVehicles();
-            }
-        }
-        
-        // ============================================
-        // Display Functions
-        // ============================================
-        
-        function displayPlayerData(nickname) {
-            const stats = state.playerData.statistics.all;
-            
-            // Basic info
-            elements.playerName.textContent = nickname;
-            elements.playerId.textContent = state.selectedAccountId;
-            elements.playerInitial.textContent = nickname.charAt(0).toUpperCase();
-            elements.globalRating.textContent = state.playerData.global_rating || 'N/A';
-            
-            // Account creation date
-            const createdDate = new Date(state.playerData.created_at * 1000);
-            const now = new Date();
-            const diffDays = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
-            const years = Math.floor(diffDays / 365);
-            const remainingDays = diffDays % 365;
-            
-            let accountAge = '';
-            if (years > 0) {
-                accountAge = `${years} an${years > 1 ? 's' : ''} et ${remainingDays} jour${remainingDays > 1 ? 's' : ''}`;
-            } else {
-                accountAge = `${diffDays} jour${diffDays > 1 ? 's' : ''}`;
-            }
-            elements.playerInfo.textContent = `Compte créé il y a ${accountAge}`;
-            
-            // Calculate statistics
-            const winRate = (stats.wins / stats.battles) * 100;
-            const avgDamage = stats.battles > 0 ? stats.damage_dealt / stats.battles : 0;
-            const avgFrags = stats.battles > 0 ? stats.frags / stats.battles : 0;
-            const avgSpotted = stats.battles > 0 ? stats.spotted / stats.battles : 0;
-            const survivalRate = stats.battles > 0 
-                ? ((stats.battles - (stats.losses + stats.draws)) / stats.battles) * 100
-                : 0;
-            
-            const wn8 = calculateWN8(stats);
-            const efficiency = calculateEfficiency(stats);
-            const kdRatio = stats.battles > 0 ? (stats.frags / (stats.battles - (stats.wins + stats.draws))).toFixed(2) : '0.00';
-            
-            // Update stats
-            elements.totalBattles.textContent = stats.battles.toLocaleString();
-            elements.winRate.textContent = `${winRate.toFixed(2)}%`;
-            elements.winRatePercent.textContent = `${winRate.toFixed(2)}%`;
-            elements.winRateBar.style.width = `${winRate}%`;
-            elements.battleCount.textContent = stats.battles.toLocaleString();
-            
-            elements.wn8.textContent = wn8;
-            elements.wn8Badge.textContent = getWN8Label(wn8);
-            elements.wn8Badge.className = `px-2 py-1 rounded-full text-xs font-semibold ${getWN8Class(wn8)}`;
-            
-            elements.avgDamage.textContent = Math.round(avgDamage).toLocaleString();
-            elements.avgFrags.textContent = avgFrags.toFixed(2);
-            elements.survivalRate.textContent = `${survivalRate.toFixed(1)}%`;
-            
-            elements.wins.textContent = stats.wins.toLocaleString();
-            elements.losses.textContent = stats.losses.toLocaleString();
-            elements.draws.textContent = stats.draws.toLocaleString();
-            
-            elements.totalDamage.textContent = stats.damage_dealt.toLocaleString();
-            elements.totalFrags.textContent = stats.frags.toLocaleString();
-            elements.defensePoints.textContent = stats.defense_points.toLocaleString();
-            elements.capturePoints.textContent = stats.capture_points.toLocaleString();
-            elements.totalSpotted.textContent = Math.round(avgSpotted * stats.battles).toLocaleString();
-            elements.avgSpotted.textContent = avgSpotted.toFixed(2);
-            elements.efficiency.textContent = `${efficiency.toFixed(1)}%`;
-            elements.kdRatio.textContent = kdRatio;
-            
-            // Vehicle count
-            elements.vehicleCount.textContent = state.allVehicles.length;
-        }
-        
-        function renderVehicles() {
-            const startIndex = (state.currentPage - 1) * state.vehiclesPerPage;
-            const endIndex = startIndex + state.vehiclesPerPage;
-            const paginatedVehicles = state.filteredVehicles.slice(startIndex, endIndex);
-            
-            elements.vehiclesList.innerHTML = '';
-            
-            if (paginatedVehicles.length === 0) {
-                elements.vehiclesList.innerHTML = `
-                    <div class="text-center py-8 text-slate-400">
-                        <i class="fas fa-tank text-4xl mb-4 opacity-50"></i>
-                        <p>Aucun véhicule trouvé pour ce joueur.</p>
-                    </div>
-                `;
-                elements.pagination.classList.add('hidden');
-                return;
-            }
-            
-            paginatedVehicles.forEach(vehicle => {
-                const card = createVehicleCard(vehicle);
-                elements.vehiclesList.appendChild(card);
-            });
-            
-            // Update pagination
-            const totalPages = Math.ceil(state.filteredVehicles.length / state.vehiclesPerPage);
-            elements.pageInfo.textContent = `Page ${state.currentPage} sur ${totalPages}`;
-            elements.prevPage.disabled = state.currentPage === 1;
-            elements.nextPage.disabled = state.currentPage === totalPages;
-            elements.pagination.classList.remove('hidden');
-        }
-        
-        function createVehicleCard(vehicle) {
-            const card = document.createElement('div');
-            card.className = 'bg-slate-700/30 border border-slate-600 rounded-xl p-4 card-hover';
-            
-            const stats = vehicle.statistics.all;
-            const info = vehicle.info;
-            
-            // Vehicle image or placeholder
-            const imageHtml = info && info.images && info.images.small_icon
-                ? `<img src="${info.images.small_icon}" alt="${info.name}" class="w-12 h-12 rounded-lg object-cover">`
-                : `<div class="w-12 h-12 rounded-lg ${nations[info?.nation || 'ussr']?.color || 'bg-slate-600'} flex items-center justify-center text-xl font-bold">${
-                    info ? info.name.charAt(0) : '?'
-                  }</div>`;
-            
-            // Vehicle name with Context Widget
-            const vehicleNameHtml = info
-                ? `<span class="ccw-word" data-type="vehicle_wotb__eu">${info.name}</span>`
-                : `Véhicule #${vehicle.tank_id}`;
-            
-            // Nation badge
-            const nationHtml = info ? `
-                <span class="px-2 py-1 rounded-full ${nations[info.nation]?.color || 'bg-slate-600'} text-xs font-semibold">
-                    ${nations[info.nation]?.icon || ''} ${nations[info.nation]?.name || info.nation}
-                </span>
-            ` : '';
-            
-            // Tier badge
-            const tierHtml = info ? `
-                <span class="px-2 py-1 bg-slate-600/50 border border-slate-600 rounded-full text-xs font-semibold">
-                    Niveau ${info.tier}
-                </span>
-            ` : '';
-            
-            // Type badge
-            const typeHtml = info && vehicleTypes[info.type] ? `
-                <span class="px-2 py-1 bg-slate-600/50 border border-slate-600 rounded-full text-xs font-semibold">
-                    ${vehicleTypes[info.type].icon} ${vehicleTypes[info.type].name}
-                </span>
-            ` : '';
-            
-            // Premium badge
-            const premiumHtml = info && info.is_premium ? 
-                '<span class="px-2 py-1 bg-yellow-500/20 border border-yellow-500 rounded-full text-xs font-semibold text-yellow-500">Premium</span>' : '';
-            
-            // Mastery badge
-            const masteryHtml = vehicle.mark_of_mastery > 0 ? `
-                <span class="px-2 py-1 rounded-full text-xs font-semibold ${getMasteryColor(vehicle.mark_of_mastery)}">
-                    ${getMasteryIcon(vehicle.mark_of_mastery)}
-                </span>
-            ` : '';
-            
-            // Win rate color
-            const winRate = vehicle.winRate;
-            const winRateColor = winRate >= 60 ? 'text-green-500' : 
-                               winRate >= 52 ? 'text-blue-500' : 
-                               winRate >= 48 ? 'text-yellow-500' : 'text-red-500';
-            
-            card.innerHTML = `
-                <div class="flex flex-col md:flex-row gap-4">
-                    <div class="flex-shrink-0">
-                        ${imageHtml}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2 mb-2">
-                            <h4 class="text-lg font-semibold truncate flex-1">${vehicleNameHtml}</h4>
-                            ${masteryHtml}
-                        </div>
-                        <div class="flex flex-wrap gap-2 mb-3">
-                            ${nationHtml}
-                            ${tierHtml}
-                            ${typeHtml}
-                            ${premiumHtml}
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                            <div>
-                                <div class="text-slate-400 text-xs">Batailles</div>
-                                <div class="font-semibold">${stats.battles.toLocaleString()}</div>
-                            </div>
-                            <div>
-                                <div class="text-slate-400 text-xs">Taux de victoire</div>
-                                <div class="font-semibold ${winRateColor}">${vehicle.winRate.toFixed(1)}%</div>
-                            </div>
-                            <div>
-                                <div class="text-slate-400 text-xs">Dégâts/moy</div>
-                                <div class="font-semibold">${Math.round(vehicle.avgDamage).toLocaleString()}</div>
-                            </div>
-                            <div>
-                                <div class="text-slate-400 text-xs">Frags/moy</div>
-                                <div class="font-semibold">${vehicle.avgFrags.toFixed(2)}</div>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <div class="w-full bg-slate-600/50 rounded-full h-1">
-                                <div class="bg-gradient-to-r from-green-500 to-green-400 h-1 rounded-full" style="width: ${vehicle.winRate}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            return card;
-        }
-        
-        // ============================================
-        // Utility Functions
-        // ============================================
-        
-        function calculateWN8(stats) {
-            if (stats.battles < 100) return 0;
-            
-            const avgDamage = stats.damage_dealt / stats.battles;
-            const avgFrags = stats.frags / stats.battles;
-            const avgSpotted = stats.spotted / stats.battles;
-            const winRate = (stats.wins / stats.battles) * 100;
-            const survivalRate = ((stats.battles - stats.losses) / stats.battles) * 100;
-            
-            const rDAMAGE = avgDamage / 1000;
-            const rFRAG = avgFrags * 100;
-            const rSPOT = avgSpotted * 100;
-            const rDEF = (stats.defense_points / stats.battles) * 100;
-            const rWIN = winRate;
-            const rSURV = survivalRate;
-            
-            const expected = (
-                rDAMAGE * 0.23 +
-                rFRAG * 0.32 +
-                rSPOT * 0.15 +
-                rDEF * 0.10 +
-                rWIN * 0.10 +
-                rSURV * 0.10
-            );
-            
-            const wn8 = Math.max(0, 1000 * expected - 300);
-            
-            return Math.round(wn8);
-        }
-        
-        function calculateEfficiency(stats) {
-            if (stats.battles === 0) return 0;
-            
-            const expectedDamage = 1000;
-            const expectedFrags = 1.0;
-            const expectedSpotted = 1.5;
-            const expectedWinRate = 0.52;
-            
-            const damageEfficiency = Math.min(1, stats.damage_dealt / (expectedDamage * stats.battles));
-            const fragsEfficiency = Math.min(1, stats.frags / (expectedFrags * stats.battles));
-            const spottedEfficiency = Math.min(1, stats.spotted / (expectedSpotted * stats.battles));
-            const winRateEfficiency = Math.min(1, stats.wins / (expectedWinRate * stats.battles));
-            
-            const efficiency = (
-                damageEfficiency * 0.3 +
-                fragsEfficiency * 0.25 +
-                spottedEfficiency * 0.2 +
-                winRateEfficiency * 0.25
-            ) * 100;
-            
-            return efficiency;
-        }
-        
-        function getWN8Label(wn8) {
-            if (wn8 >= 2400) return 'Unicum';
-            if (wn8 >= 1800) return 'Super';
-            if (wn8 >= 1400) return 'Bonne';
-            if (wn8 >= 1000) return 'Moyenne';
-            if (wn8 >= 600) return 'Faible';
-            return 'Mauvaise';
-        }
-        
-        function getWN8Class(wn8) {
-            if (wn8 >= 2400) return 'wn8-unicum';
-            if (wn8 >= 1800) return 'wn8-super';
-            if (wn8 >= 1400) return 'wn8-good';
-            if (wn8 >= 1000) return 'wn8-average';
-            return 'wn8-bad';
-        }
-        
-        function getMasteryColor(mark) {
-            if (mark === 4) return 'bg-yellow-500/20 border border-yellow-500 text-yellow-500';
-            if (mark === 3) return 'bg-purple-500/20 border border-purple-500 text-purple-500';
-            if (mark === 2) return 'bg-blue-500/20 border border-blue-500 text-blue-500';
-            if (mark === 1) return 'bg-green-500/20 border border-green-500 text-green-500';
-            return 'bg-slate-500/20 border border-slate-500 text-slate-500';
-        }
-        
-        function getMasteryIcon(mark) {
-            if (mark === 4) return '★★★';
-            if (mark === 3) return '★★';
-            if (mark === 2) return '★';
-            if (mark === 1) return '✓';
-            return '';
-        }
-        
-        // ============================================
-        // UI Utilities
-        // ============================================
-        
-        function showSection(section) {
-            elements.welcomeSection.classList.add('hidden');
-            elements.searchResultsSection.classList.add('hidden');
-            elements.playerSection.classList.add('hidden');
-            
-            switch (section) {
-                case 'welcome':
-                    elements.welcomeSection.classList.remove('hidden');
-                    break;
-                case 'results':
-                    elements.searchResultsSection.classList.remove('hidden');
-                    break;
-                case 'player':
-                    elements.playerSection.classList.remove('hidden');
-                    break;
-            }
-        }
-        
-        function showLoading(show) {
-            state.isLoading = show;
-            elements.loading.classList.toggle('hidden', !show);
-        }
-        
-        function showError(message) {
-            const errorP = elements.error.querySelector('p');
-            errorP.textContent = message;
-            elements.error.classList.remove('hidden');
-            
-            setTimeout(() => { hideError(); }, 10000);
-        }
-        
-        function hideError() {
-            elements.error.classList.add('hidden');
-        }
-        
-        function showSuccess(message) {
-            elements.successMessage.textContent = message;
-            elements.success.classList.remove('hidden');
-            
-            setTimeout(() => { hideSuccess(); }, 5000);
-        }
-        
-        function hideSuccess() {
-            elements.success.classList.add('hidden');
-        }
-        
-        // ============================================
-        // Initialize
-        // ============================================
-        
-        window.addEventListener('DOMContentLoaded', init);
-    </script>
+  <script src="js/scripts.js"></script>
 </body>
 </html>
